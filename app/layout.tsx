@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
 import NextTopLoader from "nextjs-toploader";
-import { ClerkProvider } from "@clerk/nextjs";
+import { ClerkProvider, SignOutButton } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/toaster";
 
 const outfit = Outfit({ subsets: ["latin"] });
@@ -18,7 +18,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      appearance={{
+        signIn: {
+          variables: {
+            colorPrimary: "blue",
+            colorText: "black",
+          },
+        },
+      }}
+    >
       <html lang="en">
         <body className={outfit.className}>
           {/* <SignedOut>
@@ -27,6 +36,10 @@ export default function RootLayout({
           <SignedIn>
             <UserButton />
           </SignedIn> */}
+          <SignOutButton>
+      <button>My custom button</button>
+    </SignOutButton>
+
           <NextTopLoader />
           {children}
           <Toaster />
