@@ -1,1 +1,5 @@
 npm install @clerk/elements
+https://clerk.com/docs/customization/elements/guides/sign-in#add-a-sign-in-route
+
+npx shadcn@latest init
+npx shadcn@latest add button
