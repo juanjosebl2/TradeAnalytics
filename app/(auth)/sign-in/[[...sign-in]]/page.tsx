@@ -14,17 +14,26 @@ export default function Page() {
           className="w-full space-y-6 rounded-2xl bg-white px-4 py-10 shadow-xl ring-1 ring-black/5 sm:w-96 sm:px-8"
         >
           <header className="flex flex-col items-center justify-center text-center">
-            <Image src="/logo.svg" alt="logo" width={100} height={100} />
+            <Link
+              href="/"
+              className="font-medium text-zinc-950 decoration-zinc-950/20 underline-offset-4 outline-none hover:text-zinc-700 hover:underline focus-visible:underline"
+            >
+              <Image src="/logo.svg" alt="logo" width={100} height={100} />
+            </Link>
             <h1 className="mt-4 text-xl font-medium tracking-tight text-zinc-950">
               Iniciar sesión en TradeAnalytics
             </h1>
           </header>
 
-          <Clerk.GlobalError className="block text-sm text-red-400" />
+          <Clerk.GlobalError className="block text-sm text-red-400">
+            {() => (
+              <span>Demasiados intentos fallidos, reinicie el registro.</span>
+            )}
+          </Clerk.GlobalError>
           <div className=" flex w-full gap-4 items-center text-center">
             <Clerk.Connection
               name="google"
-              className="flex w-full items-center justify-center gap-x-3 rounded-md bg-neutral-700 px-3.5 py-1.5 text-sm font-medium text-white shadow-[0_1px_0_0_theme(colors.white/5%)_inset,0_0_0_1px_theme(colors.white/2%)_inset] outline-none hover:bg-gradient-to-b hover:from-white/5 hover:to-white/5 focus-visible:outline-[1.5px] focus-visible:outline-offset-2 focus-visible:outline-white active:bg-gradient-to-b active:from-black/20 active:to-black/20 active:text-white/70"
+              className="flex w-full items-center justify-center gap-x-3 rounded-md bg-purple-100 border-black px-3.5 py-1.5 text-sm font-medium text-black shadow-lg outline-none hover:bg-gradient-to-b hover:from-black/5 hover:to-black/5 focus-visible:outline-[1.5px] focus-visible:outline-offset-2 focus-visible:outline-white active:bg-gradient-to-b active:from-black/20 active:to-black/20 active:text-white/70"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -42,7 +51,7 @@ export default function Page() {
             </Clerk.Connection>
             <Clerk.Connection
               name="github"
-              className="flex w-full items-center justify-center gap-x-3 rounded-md bg-neutral-700 px-3.5 py-1.5 text-sm font-medium text-white shadow-[0_1px_0_0_theme(colors.white/5%)_inset,0_0_0_1px_theme(colors.white/2%)_inset] outline-none hover:bg-gradient-to-b hover:from-white/5 hover:to-white/5 focus-visible:outline-[1.5px] focus-visible:outline-offset-2 focus-visible:outline-white active:bg-gradient-to-b active:from-black/20 active:to-black/20 active:text-white/70"
+              className="flex w-full items-center justify-center gap-x-3 rounded-md bg-neutral-700 px-3.5 py-1.5 text-sm font-medium text-white shadow-lg outline-none hover:bg-gradient-to-b hover:from-white/5 hover:to-white/5 focus-visible:outline-[1.5px] focus-visible:outline-offset-2 focus-visible:outline-white active:bg-gradient-to-b active:from-black/20 active:to-black/20 active:text-white/70"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -69,7 +78,13 @@ export default function Page() {
                 required
                 className="w-full rounded-md bg-white px-3.5 py-2 text-sm outline-none ring-1 ring-inset ring-zinc-300 hover:ring-zinc-400 focus:ring-[1.5px] focus:ring-zinc-950 data-[invalid]:ring-red-400"
               />
-              <Clerk.FieldError className="block text-sm text-red-400" />
+              <Clerk.FieldError className="block text-sm text-red-400">
+                {() => (
+                  <span className="text-xs">
+                    El correo electronico no esta registrado o no es válido.
+                  </span>
+                )}
+              </Clerk.FieldError>
             </Clerk.Field>
           </div>
           <SignIn.Action

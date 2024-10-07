@@ -1,5 +1,13 @@
-npm install @clerk/elements
-https://clerk.com/docs/customization/elements/guides/sign-in#add-a-sign-in-route
+
+npx create-next-app@latest my-app --typescript --tailwind --eslint
 
 npx shadcn@latest init
 npx shadcn@latest add button
+npx shadcn@latest add separator
+
+npm install @clerk/elements
+https://clerk.com/docs/customization/elements/guides/sign-in#add-a-sign-in-route
+
+Animaciones pagina principal
+https://www.npmjs.com/package/framer-motion
+npm i framer-motion

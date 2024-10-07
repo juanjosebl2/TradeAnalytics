@@ -21,10 +21,6 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={outfit.className}>
-          {/* <SignOutButton>
-            <button>Salir de la sesion</button>
-          </SignOutButton> */}
-
           <NextTopLoader />
           {children}
           <Toaster />
