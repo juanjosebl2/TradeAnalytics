@@ -1,9 +1,10 @@
 import { Reveal } from "@/components/Shared/Reveal";
-import Image from "next/image";
+import Spline from "@splinetool/react-spline/next";
 
 export function FirstBlock() {
   return (
     <div className="grid items-center lg:grid-cols-2 lg:px-0 lg:py-24">
+      {/* Contenido del texto */}
       <Reveal className="p-6 lg:pl-40" position="bottom">
         <h1 className="text-6xl font-bold md:text-7xl lg:text-8xl">
           Premium
@@ -16,15 +17,16 @@ export function FirstBlock() {
         </p>
       </Reveal>
 
-      <Reveal className="flex justify-end" position="right">
-        <Image
-          src="/images/fondo-trans-1.png"
-          alt="DriveX"
-          width={800}
-          height={800}
-          priority
-        />
-      </Reveal>
+      <Spline scene="https://prod.spline.design/IcyDyjl17tmP3Fq0/scene.splinecode" />
+      {/* <div className="flex justify-center items-center">
+        <div className="relative" style={{ overflow: 'hidden' }}>
+          <div style={{ transform: 'scale(0.8)', width: '135%'}}>
+            <Spline
+              scene="https://prod.spline.design/IcyDyjl17tmP3Fq0/scene.splinecode" 
+            />
+          </div>
+        </div>
+      </div> */}
     </div>
   );
 }

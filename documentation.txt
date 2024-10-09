@@ -11,3 +11,9 @@ https://clerk.com/docs/customization/elements/guides/sign-in#add-a-sign-in-route
 Animaciones pagina principal
 https://www.npmjs.com/package/framer-motion
 npm i framer-motion
+
+mockups diseño
+https://mockitt.wondershare.com/proto/design/pb2m2051ceim7r95v
+
+modelado 3D spline
+npm install @splinetool/react-spline
