@@ -7,17 +7,19 @@ export function FirstBlock() {
       {/* Contenido del texto */}
       <Reveal className="p-6 lg:pl-40" position="bottom">
         <h1 className="text-6xl font-bold md:text-7xl lg:text-8xl">
-          Premium
-          <span className="block">DriveX</span>
-          En españa
+          Pruebe nuestras estragias en TradeAnalytics
         </h1>
-        <p className="max-w-sm mt-8 text-lg lg:mt-8 lg:text-xl">
-          La mejora calidad en coches del mundo, ahora en España. Conoce
-          nuestros modelos y disfruta de la mejor experiencia de manejo.
+        <p className="max-w-xl mt-8 text-lg lg:mt-8 lg:text-xl">
+          Una plataforma avanzada que permite a los usuarios probar y optimizar
+          nuestras estrategias de trading en mercados financieros. Ofrece
+          análisis detallados, simulaciones en tiempo real y métricas clave para
+          mejorar la rentabilidad y gestión de riesgos, adaptándose a las
+          necesidades de traders principiantes y expertos.
         </p>
       </Reveal>
 
-      <Spline scene="https://prod.spline.design/IcyDyjl17tmP3Fq0/scene.splinecode" />
+      <Spline scene="https://prod.spline.design/07YyXQjuSYNBsX77/scene.splinecode" />
+      {/* <Spline scene="https://prod.spline.design/IcyDyjl17tmP3Fq0/scene.splinecode" /> */}
       {/* <div className="flex justify-center items-center">
         <div className="relative" style={{ overflow: 'hidden' }}>
           <div style={{ transform: 'scale(0.8)', width: '135%'}}>
