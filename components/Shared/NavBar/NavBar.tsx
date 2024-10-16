@@ -19,6 +19,7 @@ export function Navbar() {
         </Link>
 
         <div className="flex items-center justify-center gap-x-7">
+          <Link href="/symbol">Simbolos</Link>
           <Link href="/dashboard">Probador de estrategias</Link>
           {!userId ? (
             <>

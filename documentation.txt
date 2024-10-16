@@ -5,6 +5,8 @@ npx shadcn@latest init
 npx shadcn@latest add button
 npx shadcn@latest add separator
 npx shadcn@latest add carousel
+npx shadcn@latest add table
+
 npm i embla-carousel-autoplay
 
 npm install @clerk/elements
@@ -19,3 +21,6 @@ https://mockitt.wondershare.com/proto/design/pb2m2051ceim7r95v
 
 modelado 3D spline
 npm install @splinetool/react-spline
+
+API
+npm install axios
