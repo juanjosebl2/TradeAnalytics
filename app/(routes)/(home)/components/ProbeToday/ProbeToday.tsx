@@ -23,7 +23,7 @@ export function ProbeToday() {
           </div>
           <Reveal
             position="bottom"
-            className="lg:flex lg:justify-end lg:items-center mt-10"
+            className="h-[300px] w-[400px] mt-10"
           >
             <Spline scene="https://prod.spline.design/QZEpLbHHAFPLiQ3M/scene.splinecode"/>
             {/* <Image
