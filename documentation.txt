@@ -8,6 +8,11 @@ npx shadcn@latest add carousel
 npx shadcn@latest add table
 npx shadcn@latest add sheet
 npx shadcn@latest add dropdown-menu
+npx shadcn@latest add dialog
+npx shadcn@latest add form
+npx shadcn@latest add select
+npx shadcn@latest add toast
+npx shadcn@latest add textarea
 
 npm i embla-carousel-autoplay
 
@@ -26,3 +31,18 @@ npm install @splinetool/react-spline
 
 API
 npm install axios
+
+Base de datos prisma
+npm i prisma
+npx prisma init
+npm i @prisma/client
+https://console.neon.tech/app/projects
+
+npx prisma generate
+npx prisma db push (subir base de datos)
+npx prisma studio (ver contenido en la base de datos)
+
+Subir imagenes
+https://docs.uploadthing.com/
+https://uploadthing.com/
+npm install uploadthing @uploadthing/react
