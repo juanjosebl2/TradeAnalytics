@@ -18,7 +18,7 @@ model Strategy {
   id          String  @id @default(uuid())
   userId      String  @db.Text
   name        String  @db.Text
-  description String? @db.Text
+  description String @db.Text
   photo       String  @db.Text
   isPublic    Boolean @default(false)
 

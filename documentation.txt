@@ -46,3 +46,8 @@ Subir imagenes
 https://docs.uploadthing.com/
 https://uploadthing.com/
 npm install uploadthing @uploadthing/react
+
+Animaciones loved strategy
+https://zustand-demo.pmnd.rs/
+https://www.npmjs.com/package/zustand
+npm i zustand
