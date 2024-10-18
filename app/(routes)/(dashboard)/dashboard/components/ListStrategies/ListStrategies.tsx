@@ -4,13 +4,12 @@ import { Strategy } from "@prisma/client";
 import { ListStrategiesProps } from "./ListStrategies.types";
 import Image from "next/image";
 import { Heart } from "lucide-react";
-// import { ModalAddReservation } from "@/components/Shared/ModalAddReservation";
 import { useLovedStrategies } from "@/hooks/used-loved-strategies";
+import { Button } from "@/components/ui/button";
 
 export function ListStrategies(props: ListStrategiesProps) {
-  const { strategies } = props;
+  const { strategies, onSelectStrategy } = props;
   const { addLoveItem, lovedItems, removeLovedItem } = useLovedStrategies();
-
 
   return (
     <div className="grid grid-cols-2 gap-6 lg:grid-cols-4">
@@ -34,16 +33,21 @@ export function ListStrategies(props: ListStrategiesProps) {
               className="rounded-lg"
             />
             <div className="p-3">
-              <div className="mb-4 gap-x-4">
-                <p className="flex items-center text-xl min-h-16 lg:min-h-fit font-bold">
+              <div className="mb-10">
+                <p className="mb-4 text-xl min-h-16 lg:min-h-fit font-bold">
                   {name}
                 </p>
-                <p className="flex items-center text-xl min-h-16 lg:min-h-fit">
+                <p className="text-xl min-h-16 lg:min-h-fit">
                   {description}
                 </p>
               </div>
-              <div className="flex items-center justify-center mt-4 gap-x-3">
-                {/* <ModalAddReservation strategy={strategy} /> */}
+              <div className="flex items-center justify-between mt-4 gap-x-3 w-full h-full">
+
+                <Button
+                  onClick={() => onSelectStrategy(strategy)}
+                >
+                  Probar estrategia
+                </Button>
                 <Heart
                   className={`mt-2 cursor-pointer size-8 ${likedStrategy && "fill-red-500"}`}
                   onClick={likedStrategy ? () => removeLovedItem(id) : () => addLoveItem(strategy)}
