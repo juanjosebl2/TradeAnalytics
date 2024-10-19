@@ -10,7 +10,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
 interface SymbolData {
   name: string;
   bid: number;

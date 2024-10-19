@@ -52,11 +52,11 @@ export function PageDashboardClient({ strategies }: PageMainDashboardProps) {
   };
 
   const handleSelectStrategy = (strategy: Strategy) => {
-    setSelectedStrategy(strategy); // Al seleccionar una estrategia, actualizar el estado
+    setSelectedStrategy(strategy); 
   };
 
   const handleBack = () => {
-    setSelectedStrategy(null);  // Volver a la lista de estrategias
+    setSelectedStrategy(null);  
   };
 
   return (

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Trash, Upload } from "lucide-react";
+import { Trash, Upload, FolderKanban  } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
@@ -10,10 +10,10 @@ import { CardStrategyProps } from "./CardStrategy.types";
 import { ButtonEditStrategy } from "./ButtonEditStrategy";
 
 export function CardStrategy(props: CardStrategyProps) {
-  const { strategy } = props;
+  const { strategy, onSelectStrategy } = props;
   const router = useRouter();
 
-  const deleteStrategy = async() => {
+  const deleteStrategy = async () => {
     try {
       await axios.delete(`/api/strategy/${strategy.id}`);
       toast({
@@ -28,10 +28,10 @@ export function CardStrategy(props: CardStrategyProps) {
     }
   };
 
-  const handlePublicStrategy = async(publiC:boolean) => {
+  const handlePublicStrategy = async (publiC: boolean) => {
     try {
-      await axios.patch(`/api/strategy/${strategy.id}`, {isPublic: publiC});
-      if(publiC){
+      await axios.patch(`/api/strategy/${strategy.id}`, { isPublic: publiC });
+      if (publiC) {
         toast({
           title: "Estrategia publicado correctamente",
         });
@@ -70,22 +70,37 @@ export function CardStrategy(props: CardStrategyProps) {
 
       <div className="p-3">
         <div className="mb-4 gap-x-4">
-          <p className="flex items-center text-xl min-h-16 lg:min-h-fit font-bold">{strategy.name}</p>
+          <p className="flex items-center text-xl min-h-16 lg:min-h-fit font-bold">
+            {strategy.name}
+          </p>
         </div>
 
         <div className="mb-4 gap-x-4">
-          <p className="flex items-center text-xl min-h-16 lg:min-h-fit">{strategy.description}</p>
+          <p className="flex items-center text-xl min-h-16 lg:min-h-fit">
+            {strategy.description}
+          </p>
         </div>
 
         <div className="flex justify-between mt-3 gap-x-4 ">
-          <Button 
-          className="text-white bg-red-500 "
-          variant="outline" onClick={deleteStrategy}>
+          <Button
+            className="text-white bg-red-500 "
+            variant="outline"
+            onClick={deleteStrategy}
+          >
             Eliminar
             <Trash className="w-4 h-4 ml-2" />
           </Button>
-          <ButtonEditStrategy strategyData={strategy}/>
+          <ButtonEditStrategy strategyData={strategy} />
         </div>
+
+        <Button
+          className="w-full mt-3 text-white bg-orange-400"
+          variant="outline"
+          onClick={() => onSelectStrategy(strategy)}
+        >
+          Gestionar parametros
+          <FolderKanban className="w-4 h-4 ml-2" />
+        </Button>
 
         {strategy.isPublic ? (
           <Button

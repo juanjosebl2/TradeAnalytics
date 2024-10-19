@@ -2,7 +2,6 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { isAdministrator } from "@/lib/isAdminitrador";
-import { ButtonAddStrategy } from "./components/ButtonAddStrategy";
 import { ListStrategies } from "./components/ListStrategies";
 
 export default async function StrategiesManagerPage() {
@@ -20,13 +19,15 @@ export default async function StrategiesManagerPage() {
     },
   });
 
+  const params = await db.param.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  
   return (
     <div>
-      <div className="flex justify-between">
-        <h2 className="text-2xl font-bold">Administrar estrategias</h2>
-        <ButtonAddStrategy />
-      </div>
-      <ListStrategies strategies={strategy}/>
+      <ListStrategies strategies={strategy} params={params}/>
     </div>
   );
 }
