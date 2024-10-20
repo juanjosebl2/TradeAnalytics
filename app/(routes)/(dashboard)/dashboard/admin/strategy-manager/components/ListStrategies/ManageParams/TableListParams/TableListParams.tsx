@@ -11,15 +11,29 @@ import {
 } from "@/components/ui/table";
 import { TableListParamsProps } from "./TableListParams.types";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
+import { toast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
+import { ButtonEditParam } from "./ButtonEditParam";
+import { Trash } from "lucide-react";
 
 export function TableListParams({ params, onBack }: TableListParamsProps) {
-  function handleEditParam(paramId: string) {
-    console.log("Editar parámetro", paramId);
-  }
+  const router = useRouter()
 
-  function handleDeleteParam(paramId: string) {
-    console.log("Eliminar parámetro", paramId);
-  }
+  const deleteParam = async (paramId: string) => {
+    try {
+      await axios.delete(`/api/param/${paramId}`);
+      toast({
+        title: "Parametro eliminado correctamente",
+      });
+      router.refresh();
+    } catch (error) {
+      toast({
+        title: "Error al eliminar el parametro " + error,
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <>
@@ -38,19 +52,14 @@ export function TableListParams({ params, onBack }: TableListParamsProps) {
               <TableCell className="font-medium">{param.name}</TableCell>
               <TableCell>{param.value}</TableCell>
               <TableCell className="text-right">
-                {/* Cambiamos el div para que los botones se alineen a la derecha */}
                 <div className="flex justify-end space-x-4">
-                  <Button
-                    className="text-white bg-blue-400"
-                    onClick={() => handleEditParam(param.id)}
-                  >
-                    Editar
-                  </Button>
+                  <ButtonEditParam paramData={param}/>
                   <Button
                     className="text-white bg-red-500"
-                    onClick={() => handleDeleteParam(param.id)}
+                    onClick={() => deleteParam(param.id)}
                   >
                     Eliminar
+                    <Trash className="w-4 h-4 ml-2" />
                   </Button>
                 </div>
               </TableCell>

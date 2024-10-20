@@ -8,7 +8,8 @@ import { ManageParams } from "./ManageParams";
 import { ButtonAddStrategy } from "../ButtonAddStrategy";
 import { ButtonAddParam } from "./ManageParams/ButtonAddParam";
 
-export function ListStrategies(props: ListStrategiesProps) {
+export function 
+ListStrategies(props: ListStrategiesProps) {
   const { strategies, params } = props;
   const [selectedStrategy, setSelectedStrategy] = useState<Strategy | null>(
     null
