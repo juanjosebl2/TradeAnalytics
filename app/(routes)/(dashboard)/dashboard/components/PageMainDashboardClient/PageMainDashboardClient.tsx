@@ -5,12 +5,9 @@ import { ListStrategies } from "../ListStrategies";
 import { useEffect, useState } from "react";
 import { PageMainDashboardProps } from "./PageMainDashboardClient.types";
 import { FiltersStrategies } from "../FiltersStrategies";
-import { ProbeStrategy } from "../ProbeStrategy";
 
 export function PageDashboardClient({ strategies }: PageMainDashboardProps) {
-  const [selectedStrategy, setSelectedStrategy] = useState<Strategy | null>(
-    null
-  );
+
   const [filteredStrategies, setFilteredStrategies] = useState<Strategy[]>();
   const [filters, setFilters] = useState({
     name: "",
@@ -51,39 +48,19 @@ export function PageDashboardClient({ strategies }: PageMainDashboardProps) {
     });
   };
 
-  const handleSelectStrategy = (strategy: Strategy) => {
-    setSelectedStrategy(strategy); 
-  };
-
-  const handleBack = () => {
-    setSelectedStrategy(null);  
-  };
-
   return (
     <div>
-      {selectedStrategy ? (
-        <>
-          <div className="flex justify-between">
-            <h2 className="mb-4 text-2xl font-bold">Probar estrategia</h2>
-          </div>
-          <ProbeStrategy strategy={selectedStrategy}  onBack={handleBack}/>
-        </>
-      ) : (
-        <>
-          <div className="flex justify-between">
-            <h2 className="mb-4 text-2xl font-bold">Listado de estrategias</h2>
-          </div>
-          <FiltersStrategies
-            setFilters={handleFilterChange}
-            clearFilters={clearFilters}
-            filters={filters}
-          />
-          <ListStrategies
-            strategies={filteredStrategies}
-            onSelectStrategy={handleSelectStrategy}
-          />
-        </>
-      )}
+      <div className="flex justify-between">
+        <h2 className="mb-4 text-2xl font-bold">Listado de estrategias</h2>
+      </div>
+      <FiltersStrategies
+        setFilters={handleFilterChange}
+        clearFilters={clearFilters}
+        filters={filters}
+      />
+      <ListStrategies
+        strategies={filteredStrategies}
+      />
     </div>
   );
 }

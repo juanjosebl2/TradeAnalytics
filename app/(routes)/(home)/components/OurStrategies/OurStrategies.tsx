@@ -39,7 +39,7 @@ export function OurStrategies() {
               key={url}
               delay={delay}
               className="flex justify-center"
-              position="right"
+              position="bottom"
             >
               <Image
                 src={`/images/strategies/${url}`}
@@ -57,7 +57,7 @@ export function OurStrategies() {
               key={url}
               delay={delay}
               className="flex justify-center"
-              position="right"
+              position="bottom"
             >
               <Image
                 src={`/images/strategies/${url}`}

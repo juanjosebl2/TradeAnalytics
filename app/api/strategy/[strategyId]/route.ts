@@ -28,6 +28,32 @@ export async function PATCH(req: Request, { params } : { params: { strategyId: s
     }
 }
 
+export async function GET(req: Request, { params }: { params: { strategyId: string } }) {
+    try {
+      const { userId } = auth();
+      const { strategyId } = params;
+  
+      if (!userId) {
+        return new NextResponse("Unauthorized", { status: 401 });
+      }
+  
+      const strategy = await db.strategy.findUnique({
+        where: {
+          id: strategyId,
+        },
+      });
+  
+      if (!strategy) {
+        return new NextResponse("Strategy not found", { status: 404 });
+      }
+  
+      return NextResponse.json(strategy, { status: 200 });
+    } catch (error) {
+      console.error("[strategy GET]", error);
+      return new NextResponse("Internal Server Error", { status: 500 });
+    }
+  }
+
 export async function DELETE(req: Request, { params } : { params: { strategyId: string } }) {
     try {
         const { userId } = auth();

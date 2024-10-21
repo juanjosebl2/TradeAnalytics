@@ -5,6 +5,7 @@ import { useLovedStrategies } from "@/hooks/used-loved-strategies";
 import { Strategy } from "@prisma/client";
 import { Heart } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export function ListLovedStrategies() {
   const { addLoveItem, lovedItems, removeLovedItem } = useLovedStrategies();
@@ -42,9 +43,11 @@ export function ListLovedStrategies() {
                     </p>
                   </div>
                   <div className="flex items-center justify-between mt-4 gap-x-3 w-full h-full">
-                    <Button onClick={() => (strategy)}>
-                      Probar estrategia
-                    </Button>
+                    <Link href={`/dashboard/probe-strategy?id=${strategy.id}`}>
+                      <Button onClick={() => strategy}>
+                        Probar estrategia
+                      </Button>
+                    </Link>
                     <Heart
                       className={`mt-2 cursor-pointer size-8 ${
                         likedStrategy && "fill-red-500"

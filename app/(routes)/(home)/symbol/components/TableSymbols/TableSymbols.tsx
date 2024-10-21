@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import axios from "axios"; // Importa axios
 import {
   Table,
   TableBody,
@@ -10,6 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
 interface SymbolData {
   name: string;
   bid: number;
@@ -25,12 +27,8 @@ export function TableSymbols() {
   useEffect(() => {
     const fetchSymbols = async () => {
       try {
-        const res = await fetch("/api/symbols");
-        if (!res.ok) {
-          throw new Error("Error al obtener los símbolos");
-        }
-        const data: SymbolData[] = await res.json();
-        setSymbols(data);
+        const res = await axios.get<SymbolData[]>("/api/symbols");
+        setSymbols(res.data); 
       } catch (err) {
         setError((err as Error).message);
       } finally {
@@ -50,26 +48,34 @@ export function TableSymbols() {
   }
 
   return (
-    <div className="flex flex-col items-center lg:py-24 ">
+    <div className="flex flex-col items-center lg:py-24">
       <h1 className="text-4xl font-bold pb-10">Lista de Símbolos</h1>
-      <div className="">
-        <Table>
-          <TableCaption>Lista simbolos</TableCaption>
+      <div className="w-full max-w-4xl mx-auto px-4">
+        <Table className="min-w-full divide-y divide-gray-200 bg-white shadow-lg rounded-lg">
+          <TableCaption className="text-left p-4">
+            Lista de símbolos
+          </TableCaption>
           <TableHeader>
-            <TableRow>
-              <TableHead className="w-[100px]">Nombre</TableHead>
-              <TableHead>bid</TableHead>
-              <TableHead>ask</TableHead>
-              <TableHead className="text-right">spreed</TableHead>
+            <TableRow className="bg-gray-100">
+              <TableHead className="w-[150px] py-4 px-6 text-left">
+                Nombre
+              </TableHead>
+              <TableHead className="py-4 px-6 text-left">Bid</TableHead>
+              <TableHead className="py-4 px-6 text-left">Ask</TableHead>
+              <TableHead className="py-4 px-6 text-right">Spread</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {symbols.map((symbol, index) => (
-              <TableRow key={index}>
-                <TableCell className="font-medium">{symbol.name}</TableCell>
-                <TableCell>{symbol.bid}</TableCell>
-                <TableCell>{symbol.ask}</TableCell>
-                <TableCell className="text-right">{symbol.spread}</TableCell>
+              <TableRow key={index} className="hover:bg-gray-50">
+                <TableCell className="font-medium py-4 px-6">
+                  {symbol.name}
+                </TableCell>
+                <TableCell className="py-4 px-6">{symbol.bid}</TableCell>
+                <TableCell className="py-4 px-6">{symbol.ask}</TableCell>
+                <TableCell className="py-4 px-6 text-right">
+                  {symbol.spread}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
