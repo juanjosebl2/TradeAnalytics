@@ -13,6 +13,8 @@ npx shadcn@latest add form
 npx shadcn@latest add select
 npx shadcn@latest add toast
 npx shadcn@latest add textarea
+npx shadcn@latest add calendar
+npx shadcn@latest add popover
 
 npm i embla-carousel-autoplay
 
