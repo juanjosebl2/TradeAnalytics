@@ -14,7 +14,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { formSchema } from "./FormProbeStrategy.form";
 import {
   Select,
   SelectContent,
@@ -32,13 +31,22 @@ import { CalendarIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import { FormProbeStrategyProps } from "./FormProbeStrategy.types";
 import { Param } from "@prisma/client";
+import axios from "axios";
+import { useEffect, useState } from "react";
+
+interface SymbolData {
+  name: string;
+  bid: number;
+  ask: number;
+  spread: number;
+}
 
 const createFormSchema = (dynamicParams: Param[]) => {
   let schema = z.object({
     symbol: z.string().min(2).max(50),
     period: z.string().min(2).max(50),
-    fromDate: z.string().min(2).max(50),
-    toDate: z.string().min(2).max(50),
+    fromDate: z.date(),
+    toDate: z.date(),
     deposit: z.string().min(2).max(50),
     currency: z.string().min(2).max(50),
     leverage: z.string().min(2).max(50),
@@ -55,6 +63,9 @@ const createFormSchema = (dynamicParams: Param[]) => {
 
 export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
   const formSchema = createFormSchema(params);
+  const [symbols, setSymbols] = useState<SymbolData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const defaultValues = params.reduce(
     (acc: Record<string, string>, param: Param) => {
@@ -69,8 +80,8 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
     defaultValues: {
       symbol: "",
       period: "",
-      fromDate: "",
-      toDate: "",
+      fromDate: undefined,
+      toDate: undefined,
       deposit: "",
       currency: "",
       leverage: "",
@@ -78,40 +89,72 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
     },
   });
 
-  //   const form = useForm<z.infer<typeof formSchema>>({
-  //     resolver: zodResolver(formSchema),
-  //     defaultValues: {
-  //       symbol: "",
-  //       period: "",
-  //       fromDate: "",
-  //       toDate: "",
-  //       deposit: "",
-  //       currency: "",
-  //       leverage: "",
-  //     },
-  //   });
-
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    // setOpenDialog(false);
-    // try {
-    //   await axios.post("/api/strategy", values);
-    //   toast({
-    //     title: "Estrategia añadida correctamente",
-    //   });
-    //   router.refresh();
-    // } catch (error) {
-    //   toast({
-    //     title: "Error al añadir la estrategia " + { error },
-    //     variant: "destructive",
-    //   });
-    // }
+    console.log("Entrando en la función onSubmit", values);
+    const formattedValues = {
+      ...values,
+      fromDate: values.fromDate
+        ? format(new Date(values.fromDate), "yyyy.MM.dd")
+        : null,
+      toDate: values.toDate
+        ? format(new Date(values.toDate), "yyyy.MM.dd")
+        : null,
+    };
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:5000/api/submit_strategy",
+        {
+          formattedValues,
+        }
+      );
+      console.log("Estrategia enviada correctamente", response.data);
+      alert("Estrategia enviada correctamente a Python");
+    } catch (error) {
+      console.error("Error enviando estrategia:", error);
+    }
   };
+
+  useEffect(() => {
+    const fetchSymbols = async () => {
+      try {
+        const res = await axios.get<SymbolData[]>("/api/symbols");
+        setSymbols(res.data);
+      } catch (err) {
+        setError((err as Error).message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSymbols();
+  }, []);
+
+  if (loading) {
+    return <div>Cargando...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <h2 className="gap-6 mt-4">Configuración base</h2>
-        <div className="grid grid-cols-2 gap-6 mt-4">
+      <form
+        onSubmit={form.handleSubmit(
+          (data) => {
+            console.log("Datos válidos", data);
+            onSubmit(data);
+          },
+          (errors) => {
+            console.log("Errores en el formulario", errors);
+          }
+        )}
+        className="space-y-8"
+      >
+        <h2 className="gap-6 mt-8 font-bold text-indigo-600">
+          Configuración base
+        </h2>
+        <div className="grid grid-cols-2 gap-6">
           <FormField
             control={form.control}
             name="symbol"
@@ -128,7 +171,11 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="APPL">APPL</SelectItem>
+                    {symbols.map((symbol, index) => (
+                      <SelectItem key={index} value={symbol.name}>
+                        {symbol.name}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -224,6 +271,36 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
           />
           <FormField
             control={form.control}
+            name="leverage"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Apalancamiento</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecciona la divisa" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="1:33">1:33</SelectItem>
+                    <SelectItem value="1:100">1:100</SelectItem>
+                    <SelectItem value="1:200">1:200</SelectItem>
+                    <SelectItem value="CHF">1:500</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <h2 className="gap-6 font-bold text-indigo-600">Fechas de la prueba</h2>
+        <div className="grid grid-cols-2 gap-6">
+          <FormField
+            control={form.control}
             name="fromDate"
             render={({ field }) => (
               <FormItem className="flex flex-col">
@@ -244,7 +321,7 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
                           <span>Pincha una fecha</span>
                         )}
 
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        <CalendarIcon className="w-4 h-4 ml-auto opacity-50" />
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
@@ -286,7 +363,7 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
                           <span>Pincha una fecha</span>
                         )}
 
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        <CalendarIcon className="w-4 h-4 ml-auto opacity-50" />
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
@@ -307,22 +384,23 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
             )}
           />
         </div>
-        <h2 className="gap-6 mt-4">Parametros de la estragia</h2>
-        <div className="grid grid-cols-2 gap-6 mt-4">
+        <h2 className="gap-6 mt-4 font-bold text-indigo-600">
+          Parametros de la estragia
+        </h2>
+        <div className="grid grid-cols-2 gap-6">
           {params.map((param) => (
             <FormField
-              key={param.id} // Siempre asegúrate de tener una key única
+              key={param.id}
               control={form.control}
-              name={param.name} // Usamos el nombre del parámetro como nombre del campo
+              name={param.name}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{param.name}</FormLabel>{" "}
-                  {/* Etiqueta con el nombre del parámetro */}
                   <Input
                     type="text"
-                    value={field.value || param.value} // Valor del parámetro
+                    value={field.value || param.value}
                     onChange={field.onChange}
-                    className="border p-2 mb-2 w-full"
+                    className="w-full p-2 mb-2 border"
                   />
                   <FormMessage />
                 </FormItem>
@@ -331,7 +409,7 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
           ))}
         </div>
 
-        <div className="flex justify-start mt-5">
+        <div className="flex justify-start">
           <Button type="submit" className="w-auto">
             Ver resultado
           </Button>
