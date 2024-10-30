@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import axios from "axios"; // Importa axios
+import axios from "axios"; 
 import {
   Table,
   TableBody,
@@ -49,10 +49,10 @@ export function TableSymbols() {
 
   return (
     <div className="flex flex-col items-center lg:py-24">
-      <h1 className="text-4xl font-bold pb-10">Lista de Símbolos</h1>
-      <div className="w-full max-w-4xl mx-auto px-4">
-        <Table className="min-w-full divide-y divide-gray-200 bg-white shadow-lg rounded-lg">
-          <TableCaption className="text-left p-4">
+      <h1 className="pb-10 text-4xl font-bold">Lista de Símbolos</h1>
+      <div className="w-full max-w-4xl px-4 mx-auto">
+        <Table className="min-w-full bg-white divide-y divide-gray-200 rounded-lg shadow-lg">
+          <TableCaption className="p-4 text-left">
             Lista de símbolos
           </TableCaption>
           <TableHeader>
@@ -60,20 +60,20 @@ export function TableSymbols() {
               <TableHead className="w-[150px] py-4 px-6 text-left">
                 Nombre
               </TableHead>
-              <TableHead className="py-4 px-6 text-left">Bid</TableHead>
-              <TableHead className="py-4 px-6 text-left">Ask</TableHead>
-              <TableHead className="py-4 px-6 text-right">Spread</TableHead>
+              <TableHead className="px-6 py-4 text-left">Bid</TableHead>
+              <TableHead className="px-6 py-4 text-left">Ask</TableHead>
+              <TableHead className="px-6 py-4 text-right">Spread</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {symbols.map((symbol, index) => (
               <TableRow key={index} className="hover:bg-gray-50">
-                <TableCell className="font-medium py-4 px-6">
+                <TableCell className="px-6 py-4 font-medium">
                   {symbol.name}
                 </TableCell>
-                <TableCell className="py-4 px-6">{symbol.bid}</TableCell>
-                <TableCell className="py-4 px-6">{symbol.ask}</TableCell>
-                <TableCell className="py-4 px-6 text-right">
+                <TableCell className="px-6 py-4">{symbol.bid}</TableCell>
+                <TableCell className="px-6 py-4">{symbol.ask}</TableCell>
+                <TableCell className="px-6 py-4 text-right">
                   {symbol.spread}
                 </TableCell>
               </TableRow>
