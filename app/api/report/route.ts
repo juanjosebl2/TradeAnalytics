@@ -2,7 +2,9 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
     try {
-        const res = await fetch('http://localhost:5000/api/report');
+        const res = await fetch('http://localhost:5000/api/report', {
+            cache: "no-store",
+        });
         
         if (!res.ok) {
             return new NextResponse("Error al obtener los símbolos de la API de Flask", { status: 500 });

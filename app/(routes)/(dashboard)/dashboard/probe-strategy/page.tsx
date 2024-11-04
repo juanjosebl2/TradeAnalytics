@@ -43,7 +43,7 @@ export default async function ProbeStrategyPage({
       strategyId: strategy.id,
     },
     orderBy: {
-      createdAt: "desc",
+      createdAt: "asc",
     },
   });
 

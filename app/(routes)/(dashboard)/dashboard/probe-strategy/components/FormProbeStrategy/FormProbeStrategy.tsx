@@ -385,7 +385,7 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
           />
         </div>
         <h2 className="gap-6 mt-4 font-bold text-indigo-600">
-          Parametros de la estragia
+          Parametros de la estrategia
         </h2>
         <div className="grid grid-cols-2 gap-6">
           {params.map((param) => (

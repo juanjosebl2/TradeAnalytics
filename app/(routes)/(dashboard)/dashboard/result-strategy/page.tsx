@@ -8,28 +8,15 @@ interface Configuracion {
   Experto: string;
   Símbolo: string;
   Período: string;
-  "Parámetros de entrada": string;
   Empresa: string;
   Divisa: string;
   "Depósito inicial": string;
   Apalancamiento: string;
+  parametros_entrada: { [key: string]: string };
 }
 
 interface Resultados {
-  "Calidad del historial": string;
-  Barras: string;
-  "Beneficio Neto": string;
-  "Beneficio Bruto": string;
-  "Pérdidas Brutas": string;
-  "Factor de Beneficio": string;
-  "Factor de Recuperación": string;
-  AHPR: string;
-  GHPR: string;
-  "Total de operaciones ejecutadas": string;
-  "Total de transacciones": string;
-  "Correlation (Profits,MFE)": string;
-  "Tiempo mínimo para retener la posición": string;
-  // Agrega el resto de propiedades relevantes
+  [key: string]: string;
 }
 
 interface Orden {
@@ -46,10 +33,25 @@ interface Orden {
   comentario: string;
 }
 
+interface Transaccion {
+  "Fecha/Hora": string;
+  Transacción: string;
+  Símbolo: string;
+  Tipo: string;
+  Dirección: string;
+  Volumen: string;
+  Precio: string;
+  Orden: string;
+  Comisión: string;
+  Beneficio: string;
+  Balance: string;
+}
+
 interface ReportData {
   configuracion: Configuracion;
   resultados: Resultados;
   ordenes: Orden[];
+  transacciones: Transaccion[];
 }
 
 export default function ResultStrategyPage() {
@@ -115,21 +117,44 @@ export default function ResultStrategyPage() {
           {/* Configuración */}
           <h2 className="pb-4 text-2xl font-semibold">Configuración</h2>
           <ul>
-            {Object.entries(report.configuracion).map(([key, value]) => (
-              <li key={key}>
-                <strong>{key}:</strong> {value}
-              </li>
-            ))}
+            {Object.entries(report.configuracion).map(([key, value]) =>
+              key === "parametros_entrada" ? (
+                <li key={key}>
+                  <strong>Parámetros de entrada:</strong>
+                  <ul>
+                    {Object.entries(value as Record<string, string>).map(
+                      ([paramKey, paramValue]) => (
+                        <li key={paramKey}>
+                          <strong>{paramKey}:</strong> {paramValue}
+                        </li>
+                      )
+                    )}
+                  </ul>
+                </li>
+              ) : (
+                <li key={key}>
+                  <strong>{key}:</strong> {value}
+                </li>
+              )
+            )}
           </ul>
 
           {/* Resultados */}
           <h2 className="pt-6 pb-4 text-2xl font-semibold">Resultados</h2>
           <ul>
-            {Object.entries(report.resultados).map(([key, value]) => (
-              <li key={key}>
-                <strong>{key}:</strong> {value}
-              </li>
-            ))}
+            {Object.entries(report.resultados)
+              .filter(
+                ([key, value]) =>
+                  typeof key === "string" &&
+                  isNaN(Number(key)) &&
+                  key.trim() !== "" &&
+                  value.trim() !== ""
+              )
+              .map(([key, value]) => (
+                <li key={key}>
+                  <strong>{key.replace(/:$/, "")}:</strong> {value}
+                </li>
+              ))}
           </ul>
 
           {/* Ordenes */}
@@ -166,6 +191,52 @@ export default function ResultStrategyPage() {
                   <td className="px-4 py-2 border">{orden.comentario}</td>
                 </tr>
               ))}
+            </tbody>
+          </table>
+
+          {/* Transacciones */}
+          <h2 className="pt-6 pb-4 text-2xl font-semibold">Transacciones</h2>
+          <table className="w-full border border-collapse table-auto">
+            <thead>
+              <tr>
+                <th className="px-4 py-2 border">Fecha/Hora</th>
+                <th className="px-4 py-2 border">Transacción</th>
+                <th className="px-4 py-2 border">Símbolo</th>
+                <th className="px-4 py-2 border">Tipo</th>
+                <th className="px-4 py-2 border">Dirección</th>
+                <th className="px-4 py-2 border">Volumen</th>
+                <th className="px-4 py-2 border">Precio</th>
+                <th className="px-4 py-2 border">Orden</th>
+                <th className="px-4 py-2 border">Comisión</th>
+                <th className="px-4 py-2 border">Beneficio</th>
+                <th className="px-4 py-2 border">Balance</th>
+              </tr>
+            </thead>
+            <tbody>
+              {report.transacciones &&
+                report.transacciones.map((transaccion, index) => (
+                  <tr key={index}>
+                    <td className="px-4 py-2 border">
+                      {transaccion["Fecha/Hora"]}
+                    </td>
+                    <td className="px-4 py-2 border">
+                      {transaccion.Transacción}
+                    </td>
+                    <td className="px-4 py-2 border">{transaccion.Símbolo}</td>
+                    <td className="px-4 py-2 border">{transaccion.Tipo}</td>
+                    <td className="px-4 py-2 border">
+                      {transaccion.Dirección}
+                    </td>
+                    <td className="px-4 py-2 border">{transaccion.Volumen}</td>
+                    <td className="px-4 py-2 border">{transaccion.Precio}</td>
+                    <td className="px-4 py-2 border">{transaccion.Orden}</td>
+                    <td className="px-4 py-2 border">{transaccion.Comisión}</td>
+                    <td className="px-4 py-2 border">
+                      {transaccion.Beneficio}
+                    </td>
+                    <td className="px-4 py-2 border">{transaccion.Balance}</td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>

@@ -21,7 +21,7 @@ export default async function StrategiesManagerPage() {
 
   const params = await db.param.findMany({
     orderBy: {
-      createdAt: "desc",
+      createdAt: "asc",
     },
   });
   
