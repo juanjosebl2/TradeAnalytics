@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 interface Configuracion {
   Experto: string;
@@ -111,6 +113,12 @@ export default function ResultStrategyPage() {
           />
         </div>
       )}
+
+      <div className="flex justify-start mt-5">
+        <Link href={`/dashboard`}>
+          <Button className="mt-4">Volver</Button>
+        </Link>
+      </div>
 
       {report && (
         <div className="w-full max-w-6xl p-4 ">

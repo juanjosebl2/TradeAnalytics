@@ -33,6 +33,7 @@ import { FormProbeStrategyProps } from "./FormProbeStrategy.types";
 import { Param } from "@prisma/client";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface SymbolData {
   name: string;
@@ -66,6 +67,7 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
   const [symbols, setSymbols] = useState<SymbolData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   const defaultValues = params.reduce(
     (acc: Record<string, string>, param: Param) => {
@@ -100,17 +102,23 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
         ? format(new Date(values.toDate), "yyyy.MM.dd")
         : null,
     };
+    setLoading(true);
+
     try {
       const response = await axios.post(
         "http://127.0.0.1:5000/api/submit_strategy",
-        {
-          formattedValues,
-        }
+        { formattedValues }
       );
-      console.log("Estrategia enviada correctamente", response.data);
-      alert("Estrategia enviada correctamente a Python");
+      if (response.status === 200) {
+        console.log("Estrategia enviada correctamente", response.data);
+        router.push("/dashboard/result-strategy");
+      } else {
+        console.error("Error en la respuesta:", response);
+        alert("Hubo un error al enviar la estrategia.");
+      }
     } catch (error) {
       console.error("Error enviando estrategia:", error);
+      alert("Error al intentar enviar la estrategia a Python");
     }
   };
 
