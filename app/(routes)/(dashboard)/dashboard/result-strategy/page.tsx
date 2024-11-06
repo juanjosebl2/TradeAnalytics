@@ -153,14 +153,15 @@ export default function ResultStrategyPage() {
             {Object.entries(report.configuracion).map(([key, value]) =>
               key === "parametros_entrada" ? (
                 <li key={key}>
-                  <strong>Parámetros de entrada:</strong>
+                  <strong>Parametros de entrada:</strong>
                   <ul>
                     {Object.entries(value as Record<string, string>).map(
-                      ([paramKey, paramValue]) => (
-                        <li key={paramKey}>
-                          <strong>{paramKey}:</strong> {paramValue}
-                        </li>
-                      )
+                      ([paramKey, paramValue]) =>
+                        paramValue ? ( 
+                          <li key={paramKey}>
+                            <strong>{paramKey}:</strong> {paramValue}
+                          </li>
+                        ) : null
                     )}
                   </ul>
                 </li>
@@ -172,7 +173,6 @@ export default function ResultStrategyPage() {
             )}
           </ul>
 
-          {/* Resultados */}
           <h2 className="pt-6 pb-4 text-2xl font-semibold">Resultados</h2>
           <ul>
             {Object.entries(report.resultados)
@@ -190,7 +190,6 @@ export default function ResultStrategyPage() {
               ))}
           </ul>
 
-          {/* Ordenes */}
           <h2 className="pt-6 pb-4 text-2xl font-semibold">Órdenes</h2>
           <table className="w-full border border-collapse table-auto">
             <thead>
@@ -227,7 +226,6 @@ export default function ResultStrategyPage() {
             </tbody>
           </table>
 
-          {/* Transacciones */}
           <h2 className="pt-6 pb-4 text-2xl font-semibold">Transacciones</h2>
           <table className="w-full border border-collapse table-auto">
             <thead>

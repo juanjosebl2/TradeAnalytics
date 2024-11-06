@@ -106,18 +106,18 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log("Entrando en la función onSubmit", values);
     const formattedValues = {
       ...values,
       fromDate: values.fromDate
-        ? format(new Date(values.fromDate), "yyyy.MM.dd")
-        : null,
+      ? format(new Date(values.fromDate), "yyyy.MM.dd")
+      : null,
       toDate: values.toDate
-        ? format(new Date(values.toDate), "yyyy.MM.dd")
-        : null,
+      ? format(new Date(values.toDate), "yyyy.MM.dd")
+      : null,
     };
     setLoading(true);
-
+    
+    console.log("Valores formateados:", formattedValues);
     try {
       const response = await axios.post(
         "http://127.0.0.1:5000/api/submit_strategy",
@@ -307,10 +307,10 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="1:33">1:33</SelectItem>
-                    <SelectItem value="1:100">1:100</SelectItem>
-                    <SelectItem value="1:200">1:200</SelectItem>
-                    <SelectItem value="CHF">1:500</SelectItem>
+                    <SelectItem value="33">1:33</SelectItem>
+                    <SelectItem value="100">1:100</SelectItem>
+                    <SelectItem value="200">1:200</SelectItem>
+                    <SelectItem value="500">1:500</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
