@@ -43,24 +43,38 @@ interface SymbolData {
 }
 
 const createFormSchema = (dynamicParams: Param[]) => {
-  let schema = z.object({
-    symbol: z.string().min(2).max(50),
-    period: z.string().min(2).max(50),
-    fromDate: z.date(),
-    toDate: z.date(),
-    deposit: z.string().min(2).max(50),
-    currency: z.string().min(2).max(50),
-    leverage: z.string().min(2).max(50),
-  });
+  // Crear el esquema base con los campos fijos
+  const baseSchema = {
+    symbol: z.string().nonempty({ message: "Debe seleccionar uno" }),
+    period: z.string().nonempty({ message: "Debe seleccionar uno" }),
+    fromDate: z.date({ required_error: "Fecha de inicio es requerida" }),
+    toDate: z.date({ required_error: "Fecha de fin es requerida" }),
+    deposit: z.string().nonempty({ message: "Debe seleccionar uno" }),
+    currency: z.string().nonempty({ message: "Debe seleccionar uno" }),
+    leverage: z.string().nonempty({ message: "Debe seleccionar uno" }),
+  };
 
-  dynamicParams.forEach((param: Param) => {
-    schema = schema.extend({
-      [param.name]: z.string().min(1), // Añade la validación dinámica
+  // Crear el esquema dinámico de los parámetros adicionales
+  const dynamicSchema = dynamicParams.reduce((acc, param) => {
+    acc[param.name] = z.string().min(1, { message: "Debe tener al menos 1 dato" });
+    return acc;
+  }, {} as Record<string, z.ZodString>);
+
+  // Combina el esquema base y el dinámico usando extend
+  const schema = z
+    .object(baseSchema)
+    .extend(dynamicSchema)
+    .refine((data) => data.fromDate <= data.toDate, {
+      message: "La fecha de inicio no puede ser posterior a la fecha de fin",
+      path: ["toDate"], // El error se mostrará en el campo toDate
     });
-  });
 
   return schema;
 };
+
+
+
+
 
 export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
   const formSchema = createFormSchema(params);
@@ -406,7 +420,8 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
                   <FormLabel>{param.name}</FormLabel>{" "}
                   <Input
                     type="text"
-                    value={field.value || param.value}
+                    defaultValue={param.value}
+                    value={field.value}
                     onChange={field.onChange}
                     className="w-full p-2 mb-2 border"
                   />

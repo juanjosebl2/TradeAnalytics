@@ -62,6 +62,7 @@ export default function ResultStrategyPage() {
   const [error, setError] = useState<string | null>(null);
 
   const [imageBacktest, setImageBacktest] = useState<string | null>(null);
+  const [imageBacktest2, setImageBacktest2] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchReport = async () => {
@@ -86,8 +87,20 @@ export default function ResultStrategyPage() {
       }
     };
 
+    const fetchImages2 = async () => {
+      try {
+        const backtestResponse = await axios.get("/api/report/image2", {
+          responseType: "blob",
+        });
+        setImageBacktest2(URL.createObjectURL(backtestResponse.data));
+      } catch (err) {
+        setError((err as Error).message);
+      }
+    };
+
     fetchReport();
     fetchImages();
+    fetchImages2();
   }, []);
 
   if (loading) {
@@ -109,6 +122,18 @@ export default function ResultStrategyPage() {
             alt="Report Backtest"
             width={820}
             height={200}
+            className="h-auto max-w-full"
+          />
+        </div>
+      )}
+
+      {imageBacktest2 && (
+        <div className="pb-10">
+          <Image
+            src={imageBacktest2}
+            alt="Report Backtest"
+            width={860}
+            height={400}
             className="h-auto max-w-full"
           />
         </div>

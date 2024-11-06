@@ -50,7 +50,7 @@ export default async function ProbeStrategyPage({
   return (
     <div>
       <h1 className="mb-4 text-2xl font-bold">
-        Probar Estrategia - <span className="font-normal">{strategy.name}</span>
+        Probar Estrategia: <span className="font-normal">{strategy.name}</span>
       </h1>
       <FormProbeStrategy strategy={strategy} params={params} />
       <div className="flex justify-start mt-5">
