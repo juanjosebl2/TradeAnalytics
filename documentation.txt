@@ -53,3 +53,6 @@ Animaciones loved strategy
 https://zustand-demo.pmnd.rs/
 https://www.npmjs.com/package/zustand
 npm i zustand
+
+Email
+npm i resend

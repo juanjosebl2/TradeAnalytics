@@ -64,6 +64,21 @@ export default function ResultStrategyPage() {
   const [imageBacktest, setImageBacktest] = useState<string | null>(null);
   const [imageBacktest2, setImageBacktest2] = useState<string | null>(null);
 
+  // const onReserveCar = async (car: Car, dateSelected: DateRange) => {
+  //   const response = await axios.post("/api/checkout", {
+  //     carId: car.id,
+  //     priceDay: car.priceDay,
+  //     startDate: dateSelected.from,
+  //     endDate: dateSelected.to,
+  //     carName: car.name,
+  //   });
+
+  //   window.location = response.data.url;
+  //   toast({
+  //     title: "Coche reservado",
+  //   })
+  // };
+
   useEffect(() => {
     const fetchReport = async () => {
       try {

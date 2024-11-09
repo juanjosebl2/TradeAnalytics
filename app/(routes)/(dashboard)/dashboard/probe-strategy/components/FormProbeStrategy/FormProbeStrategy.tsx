@@ -34,6 +34,7 @@ import { Param } from "@prisma/client";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Information } from "../Information";
 
 interface SymbolData {
   name: string;
@@ -56,7 +57,9 @@ const createFormSchema = (dynamicParams: Param[]) => {
 
   // Crear el esquema dinámico de los parámetros adicionales
   const dynamicSchema = dynamicParams.reduce((acc, param) => {
-    acc[param.name] = z.string().min(1, { message: "Debe tener al menos 1 dato" });
+    acc[param.name] = z
+      .string()
+      .min(1, { message: "Debe tener al menos 1 dato" });
     return acc;
   }, {} as Record<string, z.ZodString>);
 
@@ -71,10 +74,6 @@ const createFormSchema = (dynamicParams: Param[]) => {
 
   return schema;
 };
-
-
-
-
 
 export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
   const formSchema = createFormSchema(params);
@@ -109,14 +108,14 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
     const formattedValues = {
       ...values,
       fromDate: values.fromDate
-      ? format(new Date(values.fromDate), "yyyy.MM.dd")
-      : null,
+        ? format(new Date(values.fromDate), "yyyy.MM.dd")
+        : null,
       toDate: values.toDate
-      ? format(new Date(values.toDate), "yyyy.MM.dd")
-      : null,
+        ? format(new Date(values.toDate), "yyyy.MM.dd")
+        : null,
     };
     setLoading(true);
-    
+
     console.log("Valores formateados:", formattedValues);
     try {
       const response = await axios.post(
@@ -182,7 +181,10 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
             name="symbol"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Simbolos</FormLabel>
+                <div className="flex items-center gap-1">
+                  <FormLabel>Simbolos</FormLabel>
+                  <Information text="Simbolos info"/>
+                </div>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -204,12 +206,16 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="period"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Periodo</FormLabel>
+                <div className="flex items-center gap-1">
+                  <FormLabel>Periodo</FormLabel>
+                  <Information text="Simbolos info"/>
+                </div>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -241,7 +247,10 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
             name="deposit"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Deposito</FormLabel>
+                <div className="flex items-center gap-1">
+                  <FormLabel>Deposito</FormLabel>
+                  <Information text="Simbolos info"/>
+                </div>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -269,7 +278,10 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
             name="currency"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Divisa</FormLabel>
+                <div className="flex items-center gap-1">
+                  <FormLabel>Divisa</FormLabel>
+                  <Information text="Simbolos info"/>
+                </div>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -296,7 +308,10 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
             name="leverage"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Apalancamiento</FormLabel>
+                <div className="flex items-center gap-1">
+                  <FormLabel>Apalancamiento</FormLabel>
+                  <Information text="Simbolos info"/>
+                </div>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -326,7 +341,10 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
             name="fromDate"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>Fecha inicio de la prueba</FormLabel>
+                <div className="flex items-center gap-1">
+                  <FormLabel>Fecha inicio de la prueba</FormLabel>
+                  <Information text="Simbolos info"/>
+                </div>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -368,7 +386,10 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
             name="toDate"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>Fecha fin de la prueba</FormLabel>
+                <div className="flex items-center gap-1">
+                  <FormLabel>Fecha fin de la prueba</FormLabel>
+                  <Information text="Simbolos info"/>
+                </div>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -417,10 +438,12 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
               name={param.name}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{param.name}</FormLabel>{" "}
+                  <div className="flex items-center gap-1">
+                    <FormLabel>{param.name}</FormLabel>
+                    <Information text="Simbolos info"/>
+                  </div>
                   <Input
                     type="text"
-                    defaultValue={param.value}
                     value={field.value}
                     onChange={field.onChange}
                     className="w-full p-2 mb-2 border"

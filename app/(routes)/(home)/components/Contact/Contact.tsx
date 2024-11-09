@@ -1,61 +1,151 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Textarea } from "@/components/ui/textarea";
+import axios from "axios";
+import { formSchema } from "./Contact.form";
+import { z } from "zod";
+import { toast } from "@/components/ui/use-toast";
 
 export function Contact() {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      lastname: "",
+      email: "",
+      phone: "",
+      message: "",
+    },
+  });
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      await axios.post("/api/email", values);
+      toast({
+        title: "Mensaje enviado correctamente",
+      });
+    } catch (error) {
+      toast({
+        title: "Error al enviar el mensaje " + error,
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
-    <div className="isolate bg-white px-6 py-24 sm:py-32 lg:px-8">
-  <div className="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]" aria-hidden="true">
-  </div>
-  <div className="mx-auto max-w-2xl text-center">
-    <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Contacto</h2>
-    <p className="mt-2 text-lg leading-8 text-gray-600">Envianos un mensaje por si le surge alguna duda.</p>
-  </div>
-  <form action="#" method="POST" className="mx-auto mt-16 max-w-xl sm:mt-20">
-    <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
-      <div>
-        <label className="block text-sm font-semibold leading-6 text-gray-900">Nombre</label>
-        <div className="mt-2.5">
-          <Input type="text" name="first-name" id="first-name" className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
-        </div>
-      </div>
-      <div>
-        <label className="block text-sm font-semibold leading-6 text-gray-900">Apellidos</label>
-        <div className="mt-2.5">
-          <Input type="text" name="last-name" id="last-name" className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
-        </div>
-      </div>
-      <div className="sm:col-span-2">
-        <label className="block text-sm font-semibold leading-6 text-gray-900">Email</label>
-        <div className="mt-2.5">
-          <Input type="email" name="email" id="email" className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
-        </div>
-      </div>
-      <div className="sm:col-span-2">
-        <label className="block text-sm font-semibold leading-6 text-gray-900">Numero de telefono</label>
-        <div className="relative mt-2.5">
-          <div className="absolute inset-y-0 left-0 flex items-center">
-            <label className="sr-only">Country</label>
-            <select id="country" name="country" className="h-full rounded-md border-0 bg-transparent bg-none py-0 pl-4 pr-2 text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
-              <option>+34</option>
-              <option>+55</option>
-              <option>+65</option>
-              <option>+14</option>
-            </select>
-          </div>
-          <Input type="tel" name="phone-number" id="phone-number" className="block w-full rounded-md border-0 px-3.5 py-2 pl-20 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
-        </div>
-      </div>
-      <div className="sm:col-span-2">
-        <label className="block text-sm font-semibold leading-6 text-gray-900">Mensaje</label>
-        <div className="mt-2.5">
-          <textarea name="message" id="message" className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
-        </div>
+    <div className="flex items-center justify-center px-6 py-24 bg-white isolate sm:py-32 lg:px-8">
+      <div className="w-full max-w-lg xl:w-[54%] shadow-xl">
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col gap-6 p-10 bg-[#ffffff] rounded-xl"
+          >
+            <h3 className="text-3xl font-bold tracking-tight text-[#2d2d2d] sm:text-4xl">
+              Contacta conmigo
+            </h3>
+            <p className="text-[#4a5568]">Envíame un mensaje, te responderé por vía email</p>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        placeholder="Nombre"
+                        {...field}
+                        className="w-full border-[#000000] text-[#000000]"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="lastname"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        placeholder="Apellido"
+                        {...field}
+                        className="w-full border-[#4a5568] text-[#2d2d2d]"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        placeholder="Email"
+                        {...field}
+                        className="w-full border-[#4a5568] text-[#2d2d2d]"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        placeholder="Teléfono"
+                        {...field}
+                        className="w-full border-[#4a5568] text-[#2d2d2d]"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <FormField
+              control={form.control}
+              name="message"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Textarea
+                      className="h-[200px] w-full border-[#4a5568] text-[#2d2d2d]"
+                      placeholder="Deja tu mensaje"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex justify-end">
+              <Button type="submit" className="max-w-40 bg-[#48bb78] text-white hover:bg-[#38a169]">
+                Enviar
+              </Button>
+            </div>
+          </form>
+        </Form>
       </div>
     </div>
-    <div className="mt-10">
-      <Button type="submit" className="block w-full rounded-md px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-slate-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Enviar</Button>
-    </div>
-  </form>
-</div>
-  )
+);
+
 }
