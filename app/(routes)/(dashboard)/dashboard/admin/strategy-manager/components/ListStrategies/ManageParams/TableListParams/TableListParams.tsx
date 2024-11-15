@@ -37,12 +37,15 @@ export function TableListParams({ params, onBack }: TableListParamsProps) {
 
   return (
     <>
-      <Table className="min-w-full divide-y divide-gray-200 bg-gray-100">
+      <Table className="min-w-full bg-gray-100 divide-y divide-gray-200">
         <TableCaption>Lista de parametros</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px]">Nombre</TableHead>
             <TableHead>Valor</TableHead>
+            <TableHead>Valor filtro mínimo</TableHead>
+            <TableHead>Valor filtro máximo</TableHead>
+            <TableHead>Descripcion</TableHead>
             <TableHead className="text-right">Acciones</TableHead>
           </TableRow>
         </TableHeader>
@@ -51,6 +54,9 @@ export function TableListParams({ params, onBack }: TableListParamsProps) {
             <TableRow key={param.id}>
               <TableCell className="font-medium">{param.name}</TableCell>
               <TableCell>{param.value}</TableCell>
+              <TableCell>{param.min_filter_value}</TableCell>
+              <TableCell>{param.max_filter_value}</TableCell>
+              <TableCell>{param.description}</TableCell>
               <TableCell className="text-right">
                 <div className="flex justify-end space-x-4">
                   <ButtonEditParam paramData={param}/>
@@ -69,7 +75,7 @@ export function TableListParams({ params, onBack }: TableListParamsProps) {
       </Table>
 
       <div className="mt-6">
-        <Button className="bg-gray-600 text-white" onClick={onBack}>
+        <Button className="text-white bg-gray-600" onClick={onBack}>
           Volver
         </Button>
       </div>

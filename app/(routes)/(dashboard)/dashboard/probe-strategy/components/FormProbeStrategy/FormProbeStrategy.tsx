@@ -44,7 +44,6 @@ interface SymbolData {
 }
 
 const createFormSchema = (dynamicParams: Param[]) => {
-  // Crear el esquema base con los campos fijos
   const baseSchema = {
     symbol: z.string().nonempty({ message: "Debe seleccionar uno" }),
     period: z.string().nonempty({ message: "Debe seleccionar uno" }),
@@ -55,21 +54,32 @@ const createFormSchema = (dynamicParams: Param[]) => {
     leverage: z.string().nonempty({ message: "Debe seleccionar uno" }),
   };
 
-  // Crear el esquema dinámico de los parámetros adicionales
   const dynamicSchema = dynamicParams.reduce((acc, param) => {
     acc[param.name] = z
       .string()
-      .min(1, { message: "Debe tener al menos 1 dato" });
+      .nonempty(`${param.name} es requerido`)
+      .refine((value) => {
+        const numValue = Number(value);
+        if (isNaN(numValue)) return false; // Asegurar que es un número
+        const min = param.min_filter_value
+          ? Number(param.min_filter_value)
+          : -Infinity;
+        const max = param.max_filter_value
+          ? Number(param.max_filter_value)
+          : Infinity;
+        return numValue >= min && numValue <= max;
+      }, {
+        message: `${param.name} debe estar entre ${param.min_filter_value} y ${param.max_filter_value}`,
+      });
     return acc;
-  }, {} as Record<string, z.ZodString>);
+  }, {} as Record<string, z.ZodTypeAny>);  
 
-  // Combina el esquema base y el dinámico usando extend
   const schema = z
     .object(baseSchema)
     .extend(dynamicSchema)
     .refine((data) => data.fromDate <= data.toDate, {
       message: "La fecha de inicio no puede ser posterior a la fecha de fin",
-      path: ["toDate"], // El error se mostrará en el campo toDate
+      path: ["toDate"],
     });
 
   return schema;
@@ -183,7 +193,7 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
               <FormItem>
                 <div className="flex items-center gap-1">
                   <FormLabel>Simbolos</FormLabel>
-                  <Information text="Simbolos info"/>
+                  <Information text="Simbolos info" />
                 </div>
                 <Select
                   onValueChange={field.onChange}
@@ -214,7 +224,7 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
               <FormItem>
                 <div className="flex items-center gap-1">
                   <FormLabel>Periodo</FormLabel>
-                  <Information text="Simbolos info"/>
+                  <Information text="Simbolos info" />
                 </div>
                 <Select
                   onValueChange={field.onChange}
@@ -249,7 +259,7 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
               <FormItem>
                 <div className="flex items-center gap-1">
                   <FormLabel>Deposito</FormLabel>
-                  <Information text="Simbolos info"/>
+                  <Information text="Simbolos info" />
                 </div>
                 <Select
                   onValueChange={field.onChange}
@@ -280,7 +290,7 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
               <FormItem>
                 <div className="flex items-center gap-1">
                   <FormLabel>Divisa</FormLabel>
-                  <Information text="Simbolos info"/>
+                  <Information text="Simbolos info" />
                 </div>
                 <Select
                   onValueChange={field.onChange}
@@ -310,7 +320,7 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
               <FormItem>
                 <div className="flex items-center gap-1">
                   <FormLabel>Apalancamiento</FormLabel>
-                  <Information text="Simbolos info"/>
+                  <Information text="Simbolos info" />
                 </div>
                 <Select
                   onValueChange={field.onChange}
@@ -343,7 +353,7 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
               <FormItem className="flex flex-col">
                 <div className="flex items-center gap-1">
                   <FormLabel>Fecha inicio de la prueba</FormLabel>
-                  <Information text="Simbolos info"/>
+                  <Information text="Simbolos info" />
                 </div>
                 <Popover>
                   <PopoverTrigger asChild>
@@ -388,7 +398,7 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
               <FormItem className="flex flex-col">
                 <div className="flex items-center gap-1">
                   <FormLabel>Fecha fin de la prueba</FormLabel>
-                  <Information text="Simbolos info"/>
+                  <Information text="Simbolos info" />
                 </div>
                 <Popover>
                   <PopoverTrigger asChild>
@@ -440,10 +450,12 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
                 <FormItem>
                   <div className="flex items-center gap-1">
                     <FormLabel>{param.name}</FormLabel>
-                    <Information text="Simbolos info"/>
+                    <Information
+                      text={param.description ? param.description : ""}
+                    />
                   </div>
                   <Input
-                    type="text"
+                    type="number"
                     value={field.value}
                     onChange={field.onChange}
                     className="w-full p-2 mb-2 border"
@@ -454,7 +466,6 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
             />
           ))}
         </div>
-
         <div className="flex justify-start">
           <Button type="submit" className="w-auto">
             Ver resultado

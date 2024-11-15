@@ -29,7 +29,10 @@ export function FormEditParam(props: FormEditParamProps) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: paramData.name,
-      value: paramData.value 
+      description: paramData.description ? paramData.description : undefined,
+      value: paramData.value,
+      min_filter_value: paramData.min_filter_value ? paramData.min_filter_value : undefined,
+      max_filter_value: paramData.max_filter_value ? paramData.max_filter_value : undefined,
     },
   });
 
@@ -54,7 +57,7 @@ export function FormEditParam(props: FormEditParamProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <div className="gap-6 mt-4">
+        <div className="gap-6 mt-4 space-y-4">
           <FormField
             control={form.control}
             name="name"
@@ -62,7 +65,20 @@ export function FormEditParam(props: FormEditParamProps) {
               <FormItem>
                 <FormLabel>Nombre</FormLabel>
                 <FormControl>
-                  <Input placeholder="Ruptura de maximos..." {...field} />
+                  <Input placeholder="Nombre del parametro" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Valor</FormLabel>
+                <FormControl>
+                  <Input placeholder="Descripcion del parametro" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -75,7 +91,33 @@ export function FormEditParam(props: FormEditParamProps) {
               <FormItem>
                 <FormLabel>Valor</FormLabel>
                 <FormControl>
-                  <Input placeholder="Una descripcion de la estrategia...." {...field} />
+                  <Input placeholder="Valor del parametro" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="min_filter_value"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Filtro valor mínimo</FormLabel>
+                <FormControl>
+                  <Input placeholder="Valor del parametro mínimo" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="max_filter_value"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Filtro valor máximo</FormLabel>
+                <FormControl>
+                  <Input placeholder="Valor del parametro máximo" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

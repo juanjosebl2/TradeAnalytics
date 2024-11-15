@@ -18,7 +18,7 @@ model Strategy {
   id          String  @id @default(uuid())
   userId      String  @db.Text
   name        String  @db.Text
-  description String @db.Text
+  description String  @db.Text
   photo       String  @db.Text
   isPublic    Boolean @default(false)
 
@@ -32,7 +32,10 @@ model Param {
   id         String @id @default(uuid())
   strategyId String @db.Text
   name       String @db.Text
+  description String? @db.Text
   value      String @db.Text
+  min_filter_value      String? @db.Text
+  max_filter_value      String? @db.Text  
 
   estrategy Strategy @relation(fields: [strategyId], references: [id], onDelete: Cascade)
 

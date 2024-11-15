@@ -28,7 +28,10 @@ export function FormAddParam(props: FormAddParamProps) {
     defaultValues: {
       strategyId: strategy.id,
       name: "",
+      description: "",
       value: "",
+      min_value: "",
+      max_value: "",
     },
   });
 
@@ -51,7 +54,7 @@ export function FormAddParam(props: FormAddParamProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <div className="gap-6 mt-4">
+        <div className="gap-6 mt-4 space-y-4">
           <FormField
             control={form.control}
             name="name"
@@ -59,7 +62,20 @@ export function FormAddParam(props: FormAddParamProps) {
               <FormItem>
                 <FormLabel>Nombre</FormLabel>
                 <FormControl>
-                  <Input placeholder="nombre del parametro" {...field} />
+                  <Input placeholder="Nombre del parametro" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Descripción</FormLabel>
+                <FormControl>
+                  <Input placeholder="Descripcion del parametro" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -70,9 +86,35 @@ export function FormAddParam(props: FormAddParamProps) {
             name="value"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>valor</FormLabel>
+                <FormLabel>Valor</FormLabel>
                 <FormControl>
                   <Input placeholder="Valor del parametro" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="min_value"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Filtro valor máximo</FormLabel>
+                <FormControl>
+                  <Input placeholder="Valor del parametro máximo" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="max_value"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Filtro valor mínimo</FormLabel>
+                <FormControl>
+                  <Input placeholder="Valor del parametro mínimo" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

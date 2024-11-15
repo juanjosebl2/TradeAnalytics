@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
     try {
         const { userId } = auth();
-        const { strategyId, name, value} =  await req.json();
+        const { strategyId, name, description, value, min_value, max_value} =  await req.json();
 
         if (!userId) {
             return new NextResponse("Unauthorized", { status: 401 });
@@ -16,7 +16,10 @@ export async function POST(req: Request) {
             data: {
                 strategyId: strategyId,
                 name: name,
+                description: description ? description : null,
                 value: value,
+                min_filter_value: min_value ? min_value : null,
+                max_filter_value: max_value ? max_value : null,
             }
         });
 
