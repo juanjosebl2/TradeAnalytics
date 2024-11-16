@@ -23,6 +23,7 @@ model Strategy {
   isPublic    Boolean @default(false)
 
   params Param[]
+  histories   History[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -38,9 +39,48 @@ model Param {
   max_filter_value      String? @db.Text  
 
   estrategy Strategy @relation(fields: [strategyId], references: [id], onDelete: Cascade)
+  //historyParams     HistoryParam[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([strategyId])
+}
+
+model History {
+  id           String   @id @default(uuid())
+  strategyId   String   @db.Text
+  strategy     Strategy @relation(fields: [strategyId], references: [id], onDelete: Cascade)
+
+  currency     String   @db.Text
+  deposit      String   @db.Text
+  leverage     String   @db.Text
+  period       String   @db.Text
+  fromDate     DateTime
+  toDate       DateTime
+  symbol       String   @db.Text
+  isSave    Boolean @default(false)
+
+  //modifiedParams HistoryParam[] 
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([strategyId])
+}
+
+model HistoryParam {
+  id         String @id @default(uuid())
+  historyId  String @db.Text
+  paramId    String @db.Text
+  modifiedValue String @db.Text
+
+  //history    History @relation(fields: [historyId], references: [id], onDelete: Cascade)
+  //param      Param   @relation(fields: [paramId], references: [id], onDelete: Cascade)
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([historyId])
+  @@index([paramId])
 }

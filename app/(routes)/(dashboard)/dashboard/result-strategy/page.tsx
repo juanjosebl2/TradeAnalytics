@@ -5,6 +5,8 @@ import axios from "axios";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { toast } from "@/components/ui/use-toast";
 
 interface Configuracion {
   Experto: string;
@@ -63,6 +65,27 @@ export default function ResultStrategyPage() {
 
   const [imageBacktest, setImageBacktest] = useState<string | null>(null);
   const [imageBacktest2, setImageBacktest2] = useState<string | null>(null);
+
+  const searchParams = useSearchParams();
+  const queryParams = Object.fromEntries(searchParams.entries());
+  const [saveParams, setSaveParams] = useState<boolean | null>(false);
+
+  const onSaveParams = async () => {
+    try {
+      await axios.post("/api/strategy", queryParams);
+      toast({
+        title: "Estrategia añadida correctamente",
+      });
+      setSaveParams(true);
+    } catch (error) {
+      toast({
+        title: "Error al añadir la estrategia " + { error },
+        variant: "destructive",
+      });
+    }
+  };
+
+  //console.log("Query params:", queryParams);
 
   // const onReserveCar = async (car: Car, dateSelected: DateRange) => {
   //   const response = await axios.post("/api/checkout", {
@@ -160,9 +183,16 @@ export default function ResultStrategyPage() {
         </Link>
       </div>
 
+      {!saveParams && (
+        <div className="flex justify-start mt-5">
+          <Button className="mt-4" onClick={() => onSaveParams()}>
+            Guardar parametros
+          </Button>
+        </div>
+      )}
+
       {report && (
         <div className="w-full max-w-6xl p-4 ">
-          {/* Configuración */}
           <h2 className="pb-4 text-2xl font-semibold">Configuración</h2>
           <ul>
             {Object.entries(report.configuracion).map(([key, value]) =>
@@ -172,7 +202,7 @@ export default function ResultStrategyPage() {
                   <ul>
                     {Object.entries(value as Record<string, string>).map(
                       ([paramKey, paramValue]) =>
-                        paramValue ? ( 
+                        paramValue ? (
                           <li key={paramKey}>
                             <strong>{paramKey}:</strong> {paramValue}
                           </li>
@@ -189,7 +219,7 @@ export default function ResultStrategyPage() {
           </ul>
 
           <h2 className="pt-6 pb-4 text-2xl font-semibold">Resultados</h2>
-          <ul>
+          <ul className="grid grid-cols-2">
             {Object.entries(report.resultados)
               .filter(
                 ([key, value]) =>

@@ -35,6 +35,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Information } from "../Information";
+import qs from "query-string";
 
 interface SymbolData {
   name: string;
@@ -60,7 +61,7 @@ const createFormSchema = (dynamicParams: Param[]) => {
       .nonempty(`${param.name} es requerido`)
       .refine((value) => {
         const numValue = Number(value);
-        if (isNaN(numValue)) return false; // Asegurar que es un número
+        if (isNaN(numValue)) return false;
         const min = param.min_filter_value
           ? Number(param.min_filter_value)
           : -Infinity;
@@ -126,7 +127,6 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
     };
     setLoading(true);
 
-    console.log("Valores formateados:", formattedValues);
     try {
       const response = await axios.post(
         "http://127.0.0.1:5000/api/submit_strategy",
@@ -134,7 +134,8 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
       );
       if (response.status === 200) {
         console.log("Estrategia enviada correctamente", response.data);
-        router.push("/dashboard/result-strategy");
+        const queryParams = qs.stringify(formattedValues);
+        router.push(`/dashboard/result-strategy?${queryParams}`);
       } else {
         console.error("Error en la respuesta:", response);
         alert("Hubo un error al enviar la estrategia.");

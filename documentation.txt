@@ -56,3 +56,6 @@ npm i zustand
 
 Email
 npm i resend
+
+Para enviar parametros a otra pagina
+npm install query-string
