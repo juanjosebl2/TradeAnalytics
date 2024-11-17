@@ -59,21 +59,24 @@ const createFormSchema = (dynamicParams: Param[]) => {
     acc[param.name] = z
       .string()
       .nonempty(`${param.name} es requerido`)
-      .refine((value) => {
-        const numValue = Number(value);
-        if (isNaN(numValue)) return false;
-        const min = param.min_filter_value
-          ? Number(param.min_filter_value)
-          : -Infinity;
-        const max = param.max_filter_value
-          ? Number(param.max_filter_value)
-          : Infinity;
-        return numValue >= min && numValue <= max;
-      }, {
-        message: `${param.name} debe estar entre ${param.min_filter_value} y ${param.max_filter_value}`,
-      });
+      .refine(
+        (value) => {
+          const numValue = Number(value);
+          if (isNaN(numValue)) return false;
+          const min = param.min_filter_value
+            ? Number(param.min_filter_value)
+            : -Infinity;
+          const max = param.max_filter_value
+            ? Number(param.max_filter_value)
+            : Infinity;
+          return numValue >= min && numValue <= max;
+        },
+        {
+          message: `${param.name} debe estar entre ${param.min_filter_value} y ${param.max_filter_value}`,
+        }
+      );
     return acc;
-  }, {} as Record<string, z.ZodTypeAny>);  
+  }, {} as Record<string, z.ZodTypeAny>);
 
   const schema = z
     .object(baseSchema)
@@ -86,7 +89,7 @@ const createFormSchema = (dynamicParams: Param[]) => {
   return schema;
 };
 
-export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
+export function FormProbeStrategy({ params, strategy }: FormProbeStrategyProps) {
   const formSchema = createFormSchema(params);
   const [symbols, setSymbols] = useState<SymbolData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -125,25 +128,75 @@ export function FormProbeStrategy({ params }: FormProbeStrategyProps) {
         ? format(new Date(values.toDate), "yyyy.MM.dd")
         : null,
     };
+
+    const globalKeys = [
+      "currency",
+      "deposit",
+      "leverage",
+      "period",
+      "symbol",
+      "fromDate",
+      "toDate",
+    ];
+
+    const globalParams = globalKeys.reduce((acc: Record<string, string | null>, key) => {
+      if (key in formattedValues) {
+        acc[key] = formattedValues[key as keyof typeof formattedValues];
+      }
+      return acc;
+    }, {});
+
+    const strategyParams = params.map((param) => ({
+      id: param.id,
+      name: param.name,
+      value: formattedValues[param.name as keyof typeof formattedValues] || "",
+    }));
+    
+
+    console.log("Global Params:", globalParams);
+    console.log("Strategy Params:", strategyParams);
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:5000/api/submit_strategy",
-        { formattedValues }
-      );
-      if (response.status === 200) {
-        console.log("Estrategia enviada correctamente", response.data);
-        const queryParams = qs.stringify(formattedValues);
-        router.push(`/dashboard/result-strategy?${queryParams}`);
+      const response = await axios.post("/api/history", {
+        strategyId: strategy.id,
+        globalParams,
+        strategyParams,
+        isSave: false, 
+      });
+  
+      if (response.status === 201) {
+        console.log("Historial guardado correctamente", response.data);
+        alert("Historial guardado correctamente.");
+        //router.push(`/dashboard/result-strategy?success=true`);
       } else {
         console.error("Error en la respuesta:", response);
-        alert("Hubo un error al enviar la estrategia.");
+        alert("Hubo un error al guardar el historial.");
       }
     } catch (error) {
-      console.error("Error enviando estrategia:", error);
-      alert("Error al intentar enviar la estrategia a Python");
+      console.error("Error guardando historial:", error);
+      alert("Error al intentar guardar el historial.");
+    } finally {
+      setLoading(false);
     }
+
+    // try {
+    //   const response = await axios.post(
+    //     "http://127.0.0.1:5000/api/submit_strategy",
+    //     { formattedValues }
+    //   );
+    //   if (response.status === 200) {
+    //     console.log("Estrategia enviada correctamente", response.data);
+    //     const queryParams = qs.stringify(formattedValues);
+    //     router.push(`/dashboard/result-strategy?${queryParams}`);
+    //   } else {
+    //     console.error("Error en la respuesta:", response);
+    //     alert("Hubo un error al enviar la estrategia.");
+    //   }
+    // } catch (error) {
+    //   console.error("Error enviando estrategia:", error);
+    //   alert("Error al intentar enviar la estrategia a Python");
+    // }
   };
 
   useEffect(() => {
