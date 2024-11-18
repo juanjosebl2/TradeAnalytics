@@ -25,6 +25,7 @@ export async function POST(req: Request) {
 
     const history = await db.history.create({
       data: {
+        userId,
         strategyId,
         currency: globalParams.currency,
         deposit: globalParams.deposit,
@@ -33,7 +34,7 @@ export async function POST(req: Request) {
         fromDate: new Date(globalParams.fromDate),
         toDate: new Date(globalParams.toDate),
         symbol: globalParams.symbol,
-        isSave: isSave || false, // Guardar si debe ser persistido
+        isSave: isSave || false, 
         modifiedParams: {
           create: strategyParams.map((param: StrategyParam) => ({
             paramId: param.id,

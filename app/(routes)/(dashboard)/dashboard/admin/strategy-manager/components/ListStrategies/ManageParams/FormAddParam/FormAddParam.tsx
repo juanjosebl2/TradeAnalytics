@@ -99,9 +99,9 @@ export function FormAddParam(props: FormAddParamProps) {
             name="min_value"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Filtro valor máximo</FormLabel>
+                <FormLabel>Filtro valor mínimo</FormLabel>
                 <FormControl>
-                  <Input placeholder="Valor del parametro máximo" {...field} />
+                  <Input placeholder="Valor del parametro mínimo" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -112,9 +112,9 @@ export function FormAddParam(props: FormAddParamProps) {
             name="max_value"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Filtro valor mínimo</FormLabel>
+                <FormLabel>Filtro valor máximo</FormLabel>
                 <FormControl>
-                  <Input placeholder="Valor del parametro mínimo" {...field} />
+                  <Input placeholder="Valor del parametro máximo" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

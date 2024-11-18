@@ -36,6 +36,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Information } from "../Information";
 import qs from "query-string";
+import { useSearchParams } from "next/navigation";
 
 interface SymbolData {
   name: string;
@@ -96,6 +97,10 @@ export function FormProbeStrategy({ params, strategy }: FormProbeStrategyProps) 
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
+  const [history, setHistory] = useState<any>(null);
+  const searchParams = useSearchParams();
+
+
   const defaultValues = params.reduce(
     (acc: Record<string, string>, param: Param) => {
       acc[param.name] = param.value || "";
@@ -152,9 +157,6 @@ export function FormProbeStrategy({ params, strategy }: FormProbeStrategyProps) 
       value: formattedValues[param.name as keyof typeof formattedValues] || "",
     }));
     
-
-    console.log("Global Params:", globalParams);
-    console.log("Strategy Params:", strategyParams);
     setLoading(true);
 
     try {
@@ -211,8 +213,23 @@ export function FormProbeStrategy({ params, strategy }: FormProbeStrategyProps) 
       }
     };
 
+    const handleHistory = () => {
+      const historyString = searchParams.get("history");
+      if (historyString) {
+        try {
+          const parsedHistory = JSON.parse(historyString);
+          setHistory(parsedHistory);
+          console.log("History recibido:", parsedHistory);
+        } catch (err) {
+          console.error("Error al deserializar history:", err);
+          setError("Error al deserializar history");
+        }
+      }
+    };
+
     fetchSymbols();
-  }, []);
+    handleHistory();
+  }, [searchParams]);
 
   if (loading) {
     return <div>Cargando...</div>;
