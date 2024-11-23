@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
+import { Upload } from "lucide-react";
 
 interface Configuracion {
   Experto: string;
@@ -14,7 +16,7 @@ interface Configuracion {
   Período: string;
   Empresa: string;
   Divisa: string;
-  "Depósito inicial": string;
+  Deposito: string;
   Apalancamiento: string;
   parametros_entrada: { [key: string]: string };
 }
@@ -38,7 +40,7 @@ interface Orden {
 }
 
 interface Transaccion {
-  "Fecha/Hora": string;
+  fecha_transaccion: string;
   Transacción: string;
   Símbolo: string;
   Tipo: string;
@@ -66,20 +68,29 @@ export default function ResultStrategyPage() {
   const [imageBacktest, setImageBacktest] = useState<string | null>(null);
   const [imageBacktest2, setImageBacktest2] = useState<string | null>(null);
 
+  const router = useRouter();
+
   const searchParams = useSearchParams();
   const queryParams = Object.fromEntries(searchParams.entries());
   const [saveParams, setSaveParams] = useState<boolean | null>(false);
 
-  const onSaveParams = async () => {
+  const handleSaveParams = async (save: boolean) => {
     try {
-      await axios.post("/api/strategy", queryParams);
-      toast({
-        title: "Estrategia añadida correctamente",
-      });
-      setSaveParams(true);
+      await axios.patch(`/api/history/${queryParams.historyId}`, { isSave: save });
+      if (save) {
+        toast({
+          title: "Parametros guardados correctamente",
+        });
+        setSaveParams(true)
+      } else {
+        toast({
+          title: "Parametros borrados correctamente",
+        });
+      }
+      router.refresh();
     } catch (error) {
       toast({
-        title: "Error al añadir la estrategia " + { error },
+        title: "Error al guardar los parametros" + error,
         variant: "destructive",
       });
     }
@@ -177,19 +188,24 @@ export default function ResultStrategyPage() {
         </div>
       )}
 
+      {!saveParams && (
+        <div className="flex justify-start mt-5">
+          <Button
+            className="w-full mt-3 text-white bg-slate-800"
+            variant="outline"
+            onClick={() => handleSaveParams(true)}
+          >
+            Guardar parametros
+            <Upload className="w-4 h-4 ml-2 " />
+          </Button>
+        </div>
+      )}
+
       <div className="flex justify-start mt-5">
         <Link href={`/dashboard`}>
           <Button className="mt-4">Volver</Button>
         </Link>
       </div>
-
-      {!saveParams && (
-        <div className="flex justify-start mt-5">
-          <Button className="mt-4" onClick={() => onSaveParams()}>
-            Guardar parametros
-          </Button>
-        </div>
-      )}
 
       {report && (
         <div className="w-full max-w-6xl p-4 ">
@@ -293,7 +309,7 @@ export default function ResultStrategyPage() {
                 report.transacciones.map((transaccion, index) => (
                   <tr key={index}>
                     <td className="px-4 py-2 border">
-                      {transaccion["Fecha/Hora"]}
+                      {transaccion["fecha_transaccion"]}
                     </td>
                     <td className="px-4 py-2 border">
                       {transaccion.Transacción}

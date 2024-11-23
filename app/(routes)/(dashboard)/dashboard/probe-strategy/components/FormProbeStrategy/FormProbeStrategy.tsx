@@ -45,6 +45,43 @@ interface SymbolData {
   spread: number;
 }
 
+interface ModifiedParamData {
+  id: string;
+  historyId: string;
+  paramId: string;
+  modifiedValue: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface StrategyData {
+  id: string;
+  userId: string;
+  name: string;
+  description: string;
+  photo: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface HistoryData {
+  id: string;
+  userId: string;
+  strategyId: string;
+  symbol: string;
+  currency: string;
+  deposit: string;
+  leverage: string;
+  period: string;
+  fromDate: string;
+  toDate: string;
+  createdAt: string;
+  updatedAt: string;
+  isSave: boolean;
+  modifiedParams: ModifiedParamData[];
+  strategy: StrategyData;
+}
+
 const createFormSchema = (dynamicParams: Param[]) => {
   const baseSchema = {
     symbol: z.string().nonempty({ message: "Debe seleccionar uno" }),
@@ -90,16 +127,18 @@ const createFormSchema = (dynamicParams: Param[]) => {
   return schema;
 };
 
-export function FormProbeStrategy({ params, strategy }: FormProbeStrategyProps) {
+export function FormProbeStrategy({
+  params,
+  strategy,
+}: FormProbeStrategyProps) {
   const formSchema = createFormSchema(params);
   const [symbols, setSymbols] = useState<SymbolData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  const [history, setHistory] = useState<any>(null);
+  const [history, setHistory] = useState<HistoryData | null>(null);
   const searchParams = useSearchParams();
-
 
   const defaultValues = params.reduce(
     (acc: Record<string, string>, param: Param) => {
@@ -144,32 +183,37 @@ export function FormProbeStrategy({ params, strategy }: FormProbeStrategyProps) 
       "toDate",
     ];
 
-    const globalParams = globalKeys.reduce((acc: Record<string, string | null>, key) => {
-      if (key in formattedValues) {
-        acc[key] = formattedValues[key as keyof typeof formattedValues];
-      }
-      return acc;
-    }, {});
+    const globalParams = globalKeys.reduce(
+      (acc: Record<string, string | null>, key) => {
+        if (key in formattedValues) {
+          acc[key] = formattedValues[key as keyof typeof formattedValues];
+        }
+        return acc;
+      },
+      {}
+    );
 
     const strategyParams = params.map((param) => ({
       id: param.id,
       name: param.name,
       value: formattedValues[param.name as keyof typeof formattedValues] || "",
     }));
-    
+
     setLoading(true);
+    let saveIdHistory = ""
 
     try {
       const response = await axios.post("/api/history", {
         strategyId: strategy.id,
         globalParams,
         strategyParams,
-        isSave: false, 
+        isSave: false,
       });
-  
+
       if (response.status === 201) {
-        console.log("Historial guardado correctamente", response.data);
-        alert("Historial guardado correctamente.");
+        console.log("Historial guardado correctamente", response.data.history.id);
+        saveIdHistory = response.data.history.id;
+        //alert("Historial guardado correctamente.");
         //router.push(`/dashboard/result-strategy?success=true`);
       } else {
         console.error("Error en la respuesta:", response);
@@ -178,27 +222,27 @@ export function FormProbeStrategy({ params, strategy }: FormProbeStrategyProps) 
     } catch (error) {
       console.error("Error guardando historial:", error);
       alert("Error al intentar guardar el historial.");
-    } finally {
-      setLoading(false);
     }
 
-    // try {
-    //   const response = await axios.post(
-    //     "http://127.0.0.1:5000/api/submit_strategy",
-    //     { formattedValues }
-    //   );
-    //   if (response.status === 200) {
-    //     console.log("Estrategia enviada correctamente", response.data);
-    //     const queryParams = qs.stringify(formattedValues);
-    //     router.push(`/dashboard/result-strategy?${queryParams}`);
-    //   } else {
-    //     console.error("Error en la respuesta:", response);
-    //     alert("Hubo un error al enviar la estrategia.");
-    //   }
-    // } catch (error) {
-    //   console.error("Error enviando estrategia:", error);
-    //   alert("Error al intentar enviar la estrategia a Python");
-    // }
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:5000/api/submit_strategy",
+        { formattedValues }
+      );
+      if (response.status === 200) {
+        //console.log("Estrategia enviada correctamente", response.data);
+        const queryParams = qs.stringify({
+          historyId: saveIdHistory || "",
+        });
+        router.push(`/dashboard/result-strategy?${queryParams}`);
+      } else {
+        console.error("Error en la respuesta:", response);
+        alert("Hubo un error al enviar la estrategia.");
+      }
+    } catch (error) {
+      console.error("Error enviando estrategia:", error);
+      alert("Error al intentar enviar la estrategia a Python");
+    }
   };
 
   useEffect(() => {
@@ -219,7 +263,6 @@ export function FormProbeStrategy({ params, strategy }: FormProbeStrategyProps) 
         try {
           const parsedHistory = JSON.parse(historyString);
           setHistory(parsedHistory);
-          console.log("History recibido:", parsedHistory);
         } catch (err) {
           console.error("Error al deserializar history:", err);
           setError("Error al deserializar history");
@@ -230,6 +273,28 @@ export function FormProbeStrategy({ params, strategy }: FormProbeStrategyProps) 
     fetchSymbols();
     handleHistory();
   }, [searchParams]);
+
+  useEffect(() => {
+    if (history) {
+      form.reset({
+        symbol: history.symbol || "",
+        period: history.period || "",
+        fromDate: history.fromDate ? new Date(history.fromDate) : undefined,
+        toDate: history.toDate ? new Date(history.toDate) : undefined,
+        deposit: history.deposit || "",
+        currency: history.currency || "",
+        leverage: history.leverage || "",
+        ...history.modifiedParams?.reduce((acc, modifiedParam) => {
+          const param = params.find((p) => p.id === modifiedParam.paramId);
+          if (param) {
+            acc[param.name] = modifiedParam.modifiedValue || "";
+          }
+          return acc;
+        }, {} as Record<string, string>),
+        
+      });
+    }
+  }, [history, form, params]);
 
   if (loading) {
     return <div>Cargando...</div>;
@@ -268,7 +333,7 @@ export function FormProbeStrategy({ params, strategy }: FormProbeStrategyProps) 
                 </div>
                 <Select
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  defaultValue={history?.symbol || field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -299,7 +364,7 @@ export function FormProbeStrategy({ params, strategy }: FormProbeStrategyProps) 
                 </div>
                 <Select
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  defaultValue={history?.period || field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -323,6 +388,7 @@ export function FormProbeStrategy({ params, strategy }: FormProbeStrategyProps) 
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="deposit"
@@ -334,7 +400,7 @@ export function FormProbeStrategy({ params, strategy }: FormProbeStrategyProps) 
                 </div>
                 <Select
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  defaultValue={history?.deposit || field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -365,7 +431,7 @@ export function FormProbeStrategy({ params, strategy }: FormProbeStrategyProps) 
                 </div>
                 <Select
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  defaultValue={history?.currency || field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -395,7 +461,7 @@ export function FormProbeStrategy({ params, strategy }: FormProbeStrategyProps) 
                 </div>
                 <Select
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  defaultValue={history?.leverage || field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -420,6 +486,9 @@ export function FormProbeStrategy({ params, strategy }: FormProbeStrategyProps) 
           <FormField
             control={form.control}
             name="fromDate"
+            defaultValue={
+              history?.fromDate ? new Date(history.fromDate) : undefined
+            }
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <div className="flex items-center gap-1">
@@ -465,6 +534,9 @@ export function FormProbeStrategy({ params, strategy }: FormProbeStrategyProps) 
           <FormField
             control={form.control}
             name="toDate"
+            defaultValue={
+              history?.toDate ? new Date(history.toDate) : undefined
+            }
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <div className="flex items-center gap-1">
@@ -527,8 +599,7 @@ export function FormProbeStrategy({ params, strategy }: FormProbeStrategyProps) 
                   </div>
                   <Input
                     type="number"
-                    value={field.value}
-                    onChange={field.onChange}
+                    {...field}
                     className="w-full p-2 mb-2 border"
                   />
                   <FormMessage />
