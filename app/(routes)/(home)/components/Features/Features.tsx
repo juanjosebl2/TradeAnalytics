@@ -8,7 +8,8 @@ export function Features() {
         Caracteristica principales
       </h3>
       <p className="max-w-lg mt-5 text-xl lg:mt-10 lg:mb-16">
-        Nosotros ofrecemos el mejor servicio para nuestros clientes, con la mejor calidad y precio.
+        Las mejores herramientas, garantizando calidad y adaptabilidad para el
+        desarrollo del proyecto.
       </p>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-5">
         {dataFeatures.map(({ icon: Icon, text, bg, delay }) => (
@@ -18,7 +19,9 @@ export function Features() {
             position="right"
             delay={delay}
           >
-            <div className={`rounded-full ${bg} w-fit p-4 mb-4 flex justify-center`}>
+            <div
+              className={`rounded-full ${bg} w-fit p-4 mb-4 flex justify-center`}
+            >
               <Icon className="w-8 h-8" />
             </div>
             <p className="text-xl font-bold text-center">{text}</p>
@@ -26,5 +29,5 @@ export function Features() {
         ))}
       </div>
     </div>
-  )
+  );
 }

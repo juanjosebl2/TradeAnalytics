@@ -10,7 +10,7 @@ export function ProbeToday() {
         <div className="lg:flex gap-x-1">
           <div className="p-8 lg:p-14">
             <h3 className="text-4xl text-white">
-              Invierta su dinero y produzca rentabilidad
+              Invierte tu dinero y produzca rentabilidad
             </h3>
             <p className="my-5 text-xl text-white">
               Registrate y explora las mejores estrategias
@@ -26,13 +26,6 @@ export function ProbeToday() {
             className="h-[300px] w-[400px] mt-10"
           >
             <Spline scene="https://prod.spline.design/QZEpLbHHAFPLiQ3M/scene.splinecode"/>
-            {/* <Image
-              src="/images/fondo-trans-1.png"
-              alt="Car Drive"
-              width={550}
-              height={250}
-              className="rounded-lg"
-            /> */}
           </Reveal>
         </div>
       </div>

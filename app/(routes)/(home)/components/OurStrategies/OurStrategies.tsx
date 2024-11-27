@@ -16,8 +16,7 @@ export function OurStrategies() {
         Estrategias principales
       </h3>
       <p className="w-full max-w-2xl mx-auto mt-2 mb-5 text-lg text-center lg:mt-5 lg:text-xl lg:mb-10">
-        No dejes escapar la oportunidad de probar nuestras mejores estrategias,
-        elige la que mas te guste.
+        No dejes pasar la oportunidad de probar las estrategias, elige la que más se ajuste a tus objetivos.
       </p>
       <div className="grid items-center justify-center max-w-2xl grid-cols-2 gap-4 mx-auto mb-5 lg:grid-cols-6">
         {categoryTradingStrategies.map(({ name, active }) => (
@@ -46,7 +45,7 @@ export function OurStrategies() {
                 alt="Car"
                 width={300}
                 height={150}
-                className="rounded-xl shadow-xl border-2 border-gray-300 transition-transform duration-300 hover:scale-105"
+                className="transition-transform duration-300 border-2 border-gray-300 shadow-xl rounded-xl hover:scale-105"
               />
             </Reveal>
           ))}
@@ -64,7 +63,7 @@ export function OurStrategies() {
                 alt="Car"
                 width={300}
                 height={150}
-                className="rounded-xl shadow-xl border-2 border-gray-300 transition-transform duration-300 hover:scale-105"
+                className="transition-transform duration-300 border-2 border-gray-300 shadow-xl rounded-xl hover:scale-105"
               />
             </Reveal>
           ))}

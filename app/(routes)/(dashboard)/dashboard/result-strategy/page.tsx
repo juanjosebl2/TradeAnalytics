@@ -291,7 +291,6 @@ export default function ResultStrategyPage() {
           <table className="w-full border border-collapse table-auto">
             <thead>
               <tr>
-                <th className="px-4 py-2 border">Fecha/Hora</th>
                 <th className="px-4 py-2 border">Transacción</th>
                 <th className="px-4 py-2 border">Símbolo</th>
                 <th className="px-4 py-2 border">Tipo</th>
@@ -308,9 +307,6 @@ export default function ResultStrategyPage() {
               {report.transacciones &&
                 report.transacciones.map((transaccion, index) => (
                   <tr key={index}>
-                    <td className="px-4 py-2 border">
-                      {transaccion["fecha_transaccion"]}
-                    </td>
                     <td className="px-4 py-2 border">
                       {transaccion.Transacción}
                     </td>
