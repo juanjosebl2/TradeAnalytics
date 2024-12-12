@@ -13,7 +13,7 @@ export function ListStrategies(props: ListStrategiesProps) {
   const { addLoveItem, lovedItems, removeLovedItem } = useLovedStrategies();
 
   return (
-    <div className="grid grid-cols-2 gap-6 lg:grid-cols-4">
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
       {strategies?.map((strategy: Strategy) => {
         const { id, name, description, photo } = strategy;
 
@@ -30,12 +30,12 @@ export function ListStrategies(props: ListStrategiesProps) {
             />
             <div className="p-3">
               <div className="mb-10">
-                <p className="mb-4 text-xl min-h-16 lg:min-h-fit font-bold">
+                <p className="mb-4 text-xl font-bold min-h-16 lg:min-h-fit">
                   {name}
                 </p>
                 <p className="text-xl min-h-16 lg:min-h-fit">{description}</p>
               </div>
-              <div className="flex items-center justify-between mt-4 gap-x-3 w-full h-full">
+              <div className="flex items-center justify-between w-full h-full mt-4 gap-x-3">
                 <Link href={`/dashboard/probe-strategy?id=${strategy.id}`}>
                   <Button>Probar estrategia</Button>
                 </Link>

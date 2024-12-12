@@ -7,7 +7,7 @@ export default function page() {
         <h2 className="mb-4 text-2xl font-semibold">Explicación de los Términos</h2>
         <ul className="pl-5 space-y-2 text-lg list-disc">
           <li>
-            <strong>Calidad del historial:</strong> Indica la precisión y completitud de los datos históricos utilizados para análisis. Un 100% significa que los datos son completamente confiables.
+            <strong>Calidad del historial:</strong> Indica la precisión y completitud de los datos históricos utilizados para análisis. Si es menos del 100% no quiere decir que los datos historicos esten mal, sino que falta una pequeña información en tiempo real. Segun la estrategia esta información puede ser importante.
           </li>
           <li>
             <strong>Barras:</strong> Representan períodos de tiempo en los datos históricos, como velas en un gráfico financiero.

@@ -74,7 +74,7 @@ export function TableListHistories({ histories }: TableListHistoriesProps) {
                       Estrategia
                     </TableHead>
                     <TableHead
-                      colSpan={6}
+                      colSpan={7}
                       className="text-center text-gray-700 border border-gray-300"
                     >
                       Configuración Básica
@@ -99,6 +99,9 @@ export function TableListHistories({ histories }: TableListHistoriesProps) {
                     </TableHead>
                   </TableRow>
                   <TableRow className="bg-gray-100">
+                    <TableHead className="text-gray-600 border border-gray-300">
+                      Simbolo
+                    </TableHead>
                     <TableHead className="text-gray-600 border border-gray-300">
                       Divisa
                     </TableHead>
@@ -141,6 +144,9 @@ export function TableListHistories({ histories }: TableListHistoriesProps) {
                           {strategyName}
                         </TableCell>
                       )}
+                      <TableCell className="border border-gray-300">
+                        {historie.symbol}
+                      </TableCell>
                       <TableCell className="border border-gray-300">
                         {historie.currency}
                       </TableCell>

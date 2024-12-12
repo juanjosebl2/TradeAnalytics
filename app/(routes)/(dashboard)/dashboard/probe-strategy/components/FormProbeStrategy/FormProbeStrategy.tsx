@@ -151,6 +151,7 @@ export function FormProbeStrategy({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      nameStrategy: "",
       symbol: "",
       period: "",
       fromDate: undefined,
@@ -171,6 +172,7 @@ export function FormProbeStrategy({
       toDate: values.toDate
         ? format(new Date(values.toDate), "yyyy.MM.dd")
         : null,
+      nameStrategy: strategy.name,
     };
 
     const globalKeys = [
