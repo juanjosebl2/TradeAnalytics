@@ -55,7 +55,7 @@ export function TableListHistories({ histories }: TableListHistoriesProps) {
           );
 
           return (
-            <div key={strategyName}>
+            <div key={strategyName} className="mx-auto overflow-x-auto max-w-screen-2xl">
               <Table className="min-w-full bg-gray-100 divide-y divide-gray-200">
                 <TableCaption>Estrategia: {strategyName}</TableCaption>
                 <TableHeader>

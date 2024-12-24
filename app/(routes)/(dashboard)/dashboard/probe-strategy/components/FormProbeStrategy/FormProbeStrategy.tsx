@@ -37,6 +37,7 @@ import { useRouter } from "next/navigation";
 import { Information } from "../Information";
 import qs from "query-string";
 import { useSearchParams } from "next/navigation";
+import { es } from "date-fns/locale";
 
 interface SymbolData {
   name: string;
@@ -202,7 +203,7 @@ export function FormProbeStrategy({
     }));
 
     setLoading(true);
-    let saveIdHistory = ""
+    let saveIdHistory = "";
 
     try {
       const response = await axios.post("/api/history", {
@@ -213,7 +214,10 @@ export function FormProbeStrategy({
       });
 
       if (response.status === 201) {
-        console.log("Historial guardado correctamente", response.data.history.id);
+        console.log(
+          "Historial guardado correctamente",
+          response.data.history.id
+        );
         saveIdHistory = response.data.history.id;
         //alert("Historial guardado correctamente.");
         //router.push(`/dashboard/result-strategy?success=true`);
@@ -293,7 +297,6 @@ export function FormProbeStrategy({
           }
           return acc;
         }, {} as Record<string, string>),
-        
       });
     }
   }, [history, form, params]);
@@ -331,7 +334,7 @@ export function FormProbeStrategy({
               <FormItem>
                 <div className="flex items-center gap-1">
                   <FormLabel>Simbolos</FormLabel>
-                  <Information text="Simbolos info" />
+                  <Information text="Representan los activos financieros que puedes negociar, como pares de divisas (EUR/USD), acciones (spx500=US500.cash), materias primas (oro=XAU/USD, petróleo=OIL) " />
                 </div>
                 <Select
                   onValueChange={field.onChange}
@@ -362,7 +365,7 @@ export function FormProbeStrategy({
               <FormItem>
                 <div className="flex items-center gap-1">
                   <FormLabel>Periodo</FormLabel>
-                  <Information text="Simbolos info" />
+                  <Information text="Es el marco de tiempo que usas para analizar los movimientos del precio. Por ejemplo, en un gráfico de 1 día, cada vela o barra muestra el movimiento de precio durante un día completo." />
                 </div>
                 <Select
                   onValueChange={field.onChange}
@@ -398,7 +401,7 @@ export function FormProbeStrategy({
               <FormItem>
                 <div className="flex items-center gap-1">
                   <FormLabel>Deposito</FormLabel>
-                  <Information text="Simbolos info" />
+                  <Information text="Es el dinero ficticio donde realizamos las pruebas" />
                 </div>
                 <Select
                   onValueChange={field.onChange}
@@ -429,7 +432,7 @@ export function FormProbeStrategy({
               <FormItem>
                 <div className="flex items-center gap-1">
                   <FormLabel>Divisa</FormLabel>
-                  <Information text="Simbolos info" />
+                  <Information text="Es la moneda en la que se maneja la cuenta de trading" />
                 </div>
                 <Select
                   onValueChange={field.onChange}
@@ -459,7 +462,7 @@ export function FormProbeStrategy({
               <FormItem>
                 <div className="flex items-center gap-1">
                   <FormLabel>Apalancamiento</FormLabel>
-                  <Information text="Simbolos info" />
+                  <Information text="Es una herramienta que te permite operar con más dinero del que tienes en tu cuenta. Por ejemplo, un apalancamiento de 1:100 significa que por cada dólar de tu cuenta, puedes operar como si tuvieras 100. Util por ejemplo para el forex ya que sus precios no varian demasiado." />
                 </div>
                 <Select
                   onValueChange={field.onChange}
@@ -495,7 +498,7 @@ export function FormProbeStrategy({
               <FormItem className="flex flex-col">
                 <div className="flex items-center gap-1">
                   <FormLabel>Fecha inicio de la prueba</FormLabel>
-                  <Information text="Simbolos info" />
+                  <Information text="Fecha inicio donde se realizara las pruebas" />
                 </div>
                 <Popover>
                   <PopoverTrigger asChild>
@@ -517,13 +520,18 @@ export function FormProbeStrategy({
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
+                  <PopoverContent
+                    className="w-auto p-0"
+                    align="start"
+                    side="bottom" 
+                  >
                     <Calendar
                       mode="single"
+                      locale={es} 
                       selected={field.value ? new Date(field.value) : undefined}
                       onSelect={field.onChange}
                       disabled={(date) =>
-                        date > new Date() || date < new Date("1900-01-01")
+                        date > new Date() || date < new Date("2022-01-01")
                       }
                       initialFocus
                     />
@@ -543,7 +551,7 @@ export function FormProbeStrategy({
               <FormItem className="flex flex-col">
                 <div className="flex items-center gap-1">
                   <FormLabel>Fecha fin de la prueba</FormLabel>
-                  <Information text="Simbolos info" />
+                  <Information text="Fecha fin donde se realizara las pruebas" />
                 </div>
                 <Popover>
                   <PopoverTrigger asChild>
@@ -568,10 +576,11 @@ export function FormProbeStrategy({
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
                       mode="single"
+                      locale={es}
                       selected={field.value ? new Date(field.value) : undefined}
                       onSelect={field.onChange}
                       disabled={(date) =>
-                        date > new Date() || date < new Date("1900-01-01")
+                        date > new Date() || date < new Date("2022-01-01")
                       }
                       initialFocus
                     />

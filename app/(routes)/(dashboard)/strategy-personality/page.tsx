@@ -31,7 +31,7 @@ export default async function page() {
   return (
     <div>
       <h1 className="m-8 text-4xl font-bold text-center">
-        Historial
+        Estrategias personalizadas
       </h1>
       <TableListHistories histories={histories} />
     </div>

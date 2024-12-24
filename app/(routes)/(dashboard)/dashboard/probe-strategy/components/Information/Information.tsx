@@ -15,7 +15,7 @@ export function Information({ text }: { text: string }) {
           d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 100 20 10 10 0 000-20z"
         />
       </svg>
-      <div className="absolute w-40 p-2 ml-2 text-sm text-white transition-opacity duration-200 transform -translate-y-1/2 bg-gray-700 rounded-lg shadow-lg opacity-0 top-1/2 left-full group-hover:opacity-100">
+      <div className="absolute p-2 ml-2 text-sm text-white transition-opacity duration-200 transform -translate-y-1/2 bg-gray-700 rounded-lg shadow-lg opacity-0 w-96 top-1/2 left-full group-hover:opacity-100">
         {text}
       </div>
     </div>
