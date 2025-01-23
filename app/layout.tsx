@@ -8,8 +8,11 @@ import { Toaster } from "@/components/ui/toaster";
 const outfit = Outfit({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Admin TradeAnalytics",
-  description: "Tester strategy by TradeAnalytics",
+  title: "TradeAnalytics",
+  description: "Conoce más sobre TradeAnalytics y cómo optimizamos estrategias.",
+  icons: {
+    icon: "/logo.svg",
+  },
 };
 
 export default function RootLayout({
@@ -19,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en">
+      <html lang="es">
         <body className={outfit.className}>
           <NextTopLoader />
           {children}

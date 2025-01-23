@@ -281,7 +281,7 @@ export default function ResultStrategyPage() {
               ))}
           </ul>
 
-          {report.ordenes.length > 0 && (
+          {/* {report.ordenes.length > 0 && (
             <>
               <h2 className="pt-8 pb-4 text-3xl font-semibold text-blue-800">
                 Órdenes
@@ -321,7 +321,7 @@ export default function ResultStrategyPage() {
                 </tbody>
               </table>
             </>
-          )}
+          )} */}
 
           {report.transacciones.length > 0 && (
             <>
