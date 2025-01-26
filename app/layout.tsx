@@ -25,23 +25,12 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="es">
         <head>
-          <title>{String(metadata.title)}</title>
-          <meta name="description" content={String(metadata.description)} />
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0"
-          />
-          <meta property="og:title" content={String(metadata.title)} />
-          <meta
-            property="og:description"
-            content={String(metadata.description)}
-          />
-          <meta property="og:type" content="website" />
-          <meta property="og:image" content="/logo.svg" />
+          <title>TradeAnalytics</title>
+          <meta name="description" content="Conoce más sobre TradeAnalytics y cómo optimizamos estrategias." />
         </head>
         <body className={outfit.className}>
           <header>
-            <h1 className="sr-only">{String(metadata.title)}</h1>
+            <h1 className="sr-only">TradeAnalytics</h1>
           </header>
           <NextTopLoader />
           {children}
