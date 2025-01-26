@@ -229,12 +229,12 @@ export function FormProbeStrategy({
       console.error("Error guardando historial:", error);
       alert("Error al intentar guardar el historial.");
     }
-
+    //"http://127.0.0.1:5000/api/submit_strategy",
     try {
       const response = await axios.post(
-        "http://127.0.0.1:5000/api/submit_strategy",
+        `${process.env.NEXT_PUBLIC_MT5_API_KEY}/api/submit_strategy`,
         { formattedValues }
-      );
+      );      
       if (response.status === 200) {
         //console.log("Estrategia enviada correctamente", response.data);
         const queryParams = qs.stringify({
