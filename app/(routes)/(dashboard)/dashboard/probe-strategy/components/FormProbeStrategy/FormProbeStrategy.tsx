@@ -231,13 +231,11 @@ export function FormProbeStrategy({
     }
     //"http://127.0.0.1:5000/api/submit_strategy",
     try {
-      console.log("API KEY:", process.env.MT5_API_URL);
-      const response = await axios.post(
-        `${process.env.MT5_API_URL}/api/submit_strategy`,
-        { formattedValues }
-      );      
+      const response = await axios.post("/api/submit-strategy", {
+        formattedValues,
+      });
+
       if (response.status === 200) {
-        //console.log("Estrategia enviada correctamente", response.data);
         const queryParams = qs.stringify({
           historyId: saveIdHistory || "",
         });
@@ -524,11 +522,11 @@ export function FormProbeStrategy({
                   <PopoverContent
                     className="w-auto p-0"
                     align="start"
-                    side="bottom" 
+                    side="bottom"
                   >
                     <Calendar
                       mode="single"
-                      locale={es} 
+                      locale={es}
                       selected={field.value ? new Date(field.value) : undefined}
                       onSelect={field.onChange}
                       disabled={(date) =>

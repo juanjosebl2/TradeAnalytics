@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
     try {
-        const res = await fetch(process.env.NEXT_PUMT5_API_URLBLIC_MT5_API_KEY+'/api/symbols');
+        const res = await fetch(process.env.MT5_API_URL+'/api/symbols');
         
         if (!res.ok) {
             return new NextResponse("Error al obtener los símbolos de la API de Flask", { status: 500 });
