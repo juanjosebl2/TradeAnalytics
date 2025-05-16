@@ -21,7 +21,7 @@ export function SidebarRoutes() {
         <Separator />
         {isAdministrator(userId) && (
           <div className="p-2 md:p-6">
-            <p className="mb-2 text-slate-500">General</p>
+            <p className="mb-2 text-slate-500">Zona administrador</p>
             {dataAdminSidebar.map((item) => (
               <SidebarItem key={item.label} item={item} />
             ))}

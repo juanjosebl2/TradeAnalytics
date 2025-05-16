@@ -1,4 +1,4 @@
-import { Calendar, Car, Heart, SquareChartGantt, NotebookPen } from "lucide-react";
+import { Calendar, Car, Heart, SquareChartGantt, NotebookPen, History } from "lucide-react";
 
 export const dataGeneralSidebar = [
     {
@@ -17,7 +17,7 @@ export const dataGeneralSidebar = [
         href: "/loved-strategies",
     },
     {
-        icon: Heart,
+        icon: History,
         label: "Historial",
         href: "/history-strategies",
     }

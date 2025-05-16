@@ -620,7 +620,7 @@ export function FormProbeStrategy({
             />
           ))}
         </div>
-        <div className="flex justify-start">
+        <div className="flex justify-end">
           <Button type="submit" className="w-auto">
             Ver resultado
           </Button>

@@ -18,6 +18,7 @@ npx shadcn@latest add popover
 
 npm i embla-carousel-autoplay
 
+Para registrar y autenticar usuarios
 npm install @clerk/elements
 https://clerk.com/docs/customization/elements/guides/sign-in#add-a-sign-in-route
 
