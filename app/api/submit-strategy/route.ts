@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
+    const flaskUrl = `${process.env.MT5_API_URL}/api/submit_strategy`;
+    console.log("[Vercel] Haciendo POST a:", flaskUrl);
     console.log("[SUBMIT_STRATEGY]", `${process.env.MT5_API_URL}/api/submit_strategy`);
     const res = await fetch(`${process.env.MT5_API_URL}/api/submit_strategy`, {
       method: "POST",
@@ -11,7 +13,7 @@ export async function POST(req: Request) {
       },
       body: JSON.stringify(body),
     });
-    console.log("Response from Flask API:", res);
+    console.log("[Vercel] Código de respuesta Flask:", res.status);
     if (!res.ok) {
       const errorText = await res.text();
       console.error("[FLASK_ERROR]", errorText);
