@@ -231,9 +231,9 @@ export function FormProbeStrategy({
     }
     //"http://127.0.0.1:5000/api/submit_strategy",
     try {
-      console.log("API KEY:", process.env.MT5_API_URL);
+      console.log("API KEY:", process.env.NEXT_PUBLIC_MT5_API_KEY);
       const response = await axios.post(
-        `${process.env.MT5_API_URL}/api/submit_strategy`,
+        `${process.env.NEXT_PUBLIC_MT5_API_KEY}/api/submit_strategy`,
         { formattedValues }
       );      
       if (response.status === 200) {
