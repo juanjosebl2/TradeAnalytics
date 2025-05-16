@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
     try {
-        const res = await fetch(process.env.NEXT_PUBLIC_MT5_API_KEY+'/api/report', {
+        const res = await fetch(process.env.MT5_API_URL+'/api/report', {
             cache: "no-store",
         });
         
