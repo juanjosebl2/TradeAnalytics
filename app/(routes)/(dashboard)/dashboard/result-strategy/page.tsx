@@ -119,6 +119,7 @@ export default function ResultStrategyPage() {
     const fetchReport = async () => {
       try {
         const res = await axios.get<ReportData>("/api/report");
+        console.log("Response data:", res.data);
         setReport(res.data);
       } catch (err) {
         setError((err as Error).message);

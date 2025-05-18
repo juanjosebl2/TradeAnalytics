@@ -33,7 +33,7 @@ import { FormProbeStrategyProps } from "./FormProbeStrategy.types";
 import { Param } from "@prisma/client";
 import axios from "axios";
 import { useEffect, useState } from "react";
-//import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Information } from "../Information";
 import qs from "query-string";
 import { useSearchParams } from "next/navigation";
@@ -136,7 +136,7 @@ export function FormProbeStrategy({
   const [symbols, setSymbols] = useState<SymbolData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  //const router = useRouter();
+  const router = useRouter();
 
   const [history, setHistory] = useState<HistoryData | null>(null);
   const searchParams = useSearchParams();
@@ -234,15 +234,12 @@ export function FormProbeStrategy({
       const response = await axios.post("/api/submit-strategy", {
         formattedValues,
       });
-      
-      console.log("Estrategia enviada correctamente", response.data);
-      
+
       if (response.status === 200) {
         const queryParams = qs.stringify({
           historyId: saveIdHistory || "",
         });
-        console.log("Query params:", queryParams);
-        //router.push(`/dashboard/result-strategy?${queryParams}`);
+        router.push(`/dashboard/result-strategy?${queryParams}`);
       } else {
         console.error("Error en la respuesta:", response);
         alert("Hubo un error al enviar la estrategia.");
