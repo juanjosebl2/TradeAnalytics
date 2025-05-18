@@ -136,7 +136,7 @@ export function FormProbeStrategy({
   const [symbols, setSymbols] = useState<SymbolData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
+  //const router = useRouter();
 
   const [history, setHistory] = useState<HistoryData | null>(null);
   const searchParams = useSearchParams();
