@@ -234,12 +234,15 @@ export function FormProbeStrategy({
       const response = await axios.post("/api/submit-strategy", {
         formattedValues,
       });
-
+      
+      console.log("Estrategia enviada correctamente", response.data);
+      
       if (response.status === 200) {
         const queryParams = qs.stringify({
           historyId: saveIdHistory || "",
         });
-        router.push(`/dashboard/result-strategy?${queryParams}`);
+        console.log("Query params:", queryParams);
+        //router.push(`/dashboard/result-strategy?${queryParams}`);
       } else {
         console.error("Error en la respuesta:", response);
         alert("Hubo un error al enviar la estrategia.");
