@@ -6,7 +6,7 @@ export function FirstBlock() {
     <div className="grid items-center lg:grid-cols-2 lg:px-0 lg:py-24">
       <Reveal className="p-6 lg:pl-40" position="bottom">
         <h1 className="text-6xl font-bold md:text-7xl lg:text-7xl">
-          Explore nuestras propuestas en ProyectAnalytics
+          Explore nuestras propuestas en TradeAnalytics
         </h1>
         <p className="max-w-xl mt-8 text-lg lg:mt-8 lg:text-xl">
           Una herramienta innovadora diseñada para ayudar a estudiantes y
